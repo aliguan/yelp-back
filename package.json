@@ -15,6 +15,8 @@
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "express-ejs-layouts": "~2.2.0",
+    "geocoder": "^0.2.3",
+    "meetup-api": "^1.4.30",
     "mongoose": "^4.13.4",
     "morgan": "~1.7.0",
     "nodemon": "^1.12.1",
