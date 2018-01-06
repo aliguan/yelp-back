@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
@@ -547,7 +546,7 @@ module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
       // comment
-      
+
       // Version control is confusing
       //herro difhgslidfhglsdfhg
 <<<<<<< HEAD
@@ -1094,7 +1093,7 @@ function mutate(itinerary_in, numItemsArray_in) {
 module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
- 
+
       // Format data
 
       var parsedDataAll = this.preProcessData(allData);
