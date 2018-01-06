@@ -73,6 +73,8 @@ function getMeetupData(location_in) {
             var date = getDate(20); // a date x days from now (need to change to get input from user)
             var meetupFee;
 
+            console.log("latLongArray[0]" + latLongArray[0])
+            console.log("latLongArray[1]" + latLongArray[1])
             // API call
             meetup.getUpcomingEvents({
                 lat: latLongArray[0],
@@ -86,8 +88,10 @@ function getMeetupData(location_in) {
                     console.log(error);
                     reject(-1);
                 } else {
-                    var numOfEvents = events.events.length;
+                    var numOfEvents = events.events.length;                    
+                    console.log(events.events[0])
                     for (var i = 0; i < numOfEvents; i++) {
+                        
                         
                         // Get the event time
                         var time = events.events[i].time;
