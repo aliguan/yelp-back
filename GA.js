@@ -2,6 +2,7 @@ module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
       // comment
+      // Version control is confusing
       // Format data
       var parsedDataAll = this.preProcessData(allData);
       if (parsedDataAll == 0) return 0;
