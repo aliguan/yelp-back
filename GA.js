@@ -3,7 +3,9 @@ module.exports = {
     doGA: function(allData, budgetmax_in, budgetmin_in) {
       // comment
       //herro difhgslidfhglsdfhg
+      //f seuhrglisdhfgshergliuhse hi try 3
       // Format data
+
       var parsedDataAll = this.preProcessData(allData);
       if (parsedDataAll == 0) return 0;
 
