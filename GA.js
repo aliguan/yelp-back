@@ -3,7 +3,6 @@ module.exports = {
     doGA: function(allData, budgetmax_in, budgetmin_in) {
 
       // Format data
-
       var parsedDataAll = this.preProcessData(allData);
       if (parsedDataAll == 0) return 0;
 
@@ -41,7 +40,7 @@ module.exports = {
       console.log("----------")
 
       // Find the "fittest" itinerary and return some itinerary stats
-      bestItineraryObj       = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
+      bestItineraryObj       = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);      
       iBestItinerary         = bestItineraryObj.bestItineraryOut;
       bestRating             = bestItineraryObj.bestItineraryRatingOut;
       bestCost               = bestItineraryObj.bestItineraryCostOut;
@@ -117,14 +116,14 @@ module.exports = {
         itineraryPopulation = newItineraryPop.slice(0);
         bestItineraryObj = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
         iBestItinerary = bestItineraryObj.bestItineraryOut;
-        bestRating = bestItineraryObj.bestItineraryRatingOut;
+        bestRating = bestItineraryObj.bestItineraryRatingOut;          
         bestCost = bestItineraryObj.bestItineraryCostOut;
         allItineraryRatings = bestItineraryObj.allItineraryRatingsOut;
         allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
 
         if (i % 20 == 0) {
         console.log("best rating at " + i + "th iteration: " + bestRating);
-        console.log("best cost at " + i + "th iteration: " + bestCost);
+        console.log("best cost at " + i + "th iteration: " + bestCost);    
         console.log("population rating sum: " + i + "th iteration: " + allItineraryRatingsSum);
       }
 
@@ -278,15 +277,17 @@ function randomIntFromInterval(min, max) {
 function pickRandomItineraryItemExcluding(numCategoryItems, iExcludeItem) { // Note numCategoryItems is the length of the vector
   // iExcludeItem is the INDEX of the vector
   iItineraryItem = randomIntFromInterval(0, numCategoryItems - 1); // from 0 to length of array minus 1
-  if (iItineraryItem == iExcludeItem) {
-    if (iItineraryItem == 0) {
-      iItineraryItem++;
-    }
-    else if (iItineraryItem == (numCategoryItems - 1)) {
-      iItineraryItem--;
-    }
-    else {
-      iItineraryItem++;
+  if (numCategoryItems != 1) {
+    if (iItineraryItem == iExcludeItem) {
+      if (iItineraryItem == 0) {
+        iItineraryItem++;
+      }
+      else if (iItineraryItem == (numCategoryItems - 1)) {
+        iItineraryItem--;
+      }
+      else {
+        iItineraryItem++;
+      }
     }
   }
   return iItineraryItem;
@@ -300,7 +301,7 @@ function isInArray(value, array) {
 }
 
 // Determine the "fittest" itinerary
-function findBestItinerary(itineraryPop_in, allData_in, budygetmax_in, budgetmin_in) {
+function findBestItinerary(itineraryPop_in, allData_in, budygetmax_in, budgetmin_in) {  
   var budgetmax = budygetmax_in;
   var budgetmin = budgetmin_in;
   var maxItineraryRating = 0;
@@ -326,11 +327,14 @@ function findBestItinerary(itineraryPop_in, allData_in, budygetmax_in, budgetmin
     }
     // Otherwise, calculate the total rating of the itinerary
     else {
+      //console.log(itineraryPop_in[i])
       itineraryRating = getTotalRating(itineraryPop_in[i], allData_in);
+      //console.log(itineraryRating)
     }
 
     // Save all the total ratings for later use
     allItineraryRatings[i] = itineraryRating;
+    
 
     // Save the entire population's total rating
     allItineraryValSum = allItineraryValSum + itineraryRating;
@@ -428,7 +432,7 @@ function getTotalRating(itinerary_in, allData_in) {
     totalRating = totalRating + itineraryItemRating;
   }
   totalRating = Math.round(totalRating);
-
+  
   return totalRating;
 }
 
