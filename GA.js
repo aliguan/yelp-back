@@ -37,7 +37,7 @@ module.exports = {
       itineraryPopulation = this.initializePopulation(popSize, itinerarySize, numItemsArray);
       //console.log("Initial Population:")
       //console.log(itineraryPopulation);
-      console.log("----------")
+      console.log("---------------------gen algo start---------------------")
 
       // Find the "fittest" itinerary and return some itinerary stats
       bestItineraryObj       = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);      
@@ -121,14 +121,14 @@ module.exports = {
         allItineraryRatings = bestItineraryObj.allItineraryRatingsOut;
         allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
 
-        if (i % 20 == 0) {
+        if (i % 50 == 0) {
         console.log("best rating at " + i + "th iteration: " + bestRating);
         console.log("best cost at " + i + "th iteration: " + bestCost);    
         console.log("population rating sum: " + i + "th iteration: " + allItineraryRatingsSum);
       }
 
     } // end maxIter loop
-    console.log("----------")
+    console.log("---------------------gen algo end---------------------")
     //console.log("End population")
     //console.log(itineraryPopulation)
     console.log("best rating: " + bestRating);

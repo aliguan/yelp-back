@@ -6,6 +6,7 @@ const yelp = require('yelp-fusion');
 const genAlgo = require('../GA.js');
 const yelpApi = require('../externalApis/yelpapi.js');
 const meetupApi = require('../externalApis/meetupapi.js');
+const seatgeekApi = require('../externalApis/seatgeekapi.js');
 const misc = require('../miscfuncs/misc.js');
 
 const clientId = process.env.CLIENT_ID;
@@ -17,14 +18,15 @@ apiRouter.post('/', (req, res, next) => {
 
     var yelpItemsGlobal;
     var meetupItemsGlobal;
+    var seatgeekItemsGlobal;
 
     // Promise Chain of API calls
 
     // 1. fulfilled promise returned from getYelpDataLength is the total businesses returned from the query
-    getYelpDataLength(req.body.term, req.body.location).then(
+    getYelpDataLength(req.body.term, req.body.latlon).then(
         function (yelpTotal) {
             // 2. fulfilled promise returned from getYelpData is an array of object arrays
-            return yelpApi.getYelpData(yelpTotal, req.body.term, req.body.location, client);
+            return yelpApi.getYelpData(yelpTotal, req.body.term, req.body.latlon, client);
         }, function (err) {
             return err;
         })
@@ -33,36 +35,71 @@ apiRouter.post('/', (req, res, next) => {
         })
         .then(function (yelpItems) {
             yelpItemsGlobal = yelpItems;
-            // 3. fulfilled promise returned from getYelpData is an array of object arrays
-            return meetupApi.getMeetupData(req.body.location);
+            // 3. fulfilled promise returned from getMeetupData is an array of object arrays
+            return meetupApi.getMeetupData(req.body.latlon);
         }, function (err) {
             return err;
         }).catch(function (e) {
             console.log(e)
-    }).then(function (meetupEvents) {
-        var itineraries = formatAllData(yelpItemsGlobal,meetupEvents);
-        if (!misc.isEmpty(itineraries)) {
-            res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
-        }
-    },function (err) {
-        return err;
-    }).catch(function (e) {
-        console.log(e)
-    });
+        }).then(function (meetupEvents) {
+            meetupItemsGlobal = meetupEvents;
+             // 4. fulfilled promise returned from getSeatGeekData is an array of object arrays
+            return seatgeekApi.getSeatGeekData(req.body.city);
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
+        }).then(function (seatgeekEvents) {
+            
+            seatgeekItemsGlobal = seatgeekEvents;
+            console.log("---------------------Seatgeek API returned data check---------------------")
+            console.log(seatgeekItemsGlobal.Event1[0]);
+            console.log(seatgeekItemsGlobal.Event2[0]);
+            console.log(seatgeekItemsGlobal.Event3[0]);
+            console.log(seatgeekItemsGlobal.Event4[0]);
+            console.log("---------------------meetup API returned data check---------------------")
+            console.log(meetupItemsGlobal.Event1[0]);
+            console.log(meetupItemsGlobal.Event2[0]);
+            console.log(meetupItemsGlobal.Event3[0]);
+            console.log(meetupItemsGlobal.Event4[0]);
+            console.log("---------------------yelp API returned data check---------------------")
+            console.log(yelpItemsGlobal[0]);      
+            console.log(yelpItemsGlobal[1]);
+            console.log(yelpItemsGlobal[2]);
+            console.log(yelpItemsGlobal[3]);
 
+            // Consolidate all events by concatenation
+            var events = {
+                Event1: [],
+                Event2: [],
+                Event3: [],
+                Event4: []
+            };
+            events.Event1 = seatgeekItemsGlobal.Event1.concat(meetupItemsGlobal.Event1);
+            events.Event2 = seatgeekItemsGlobal.Event2.concat(meetupItemsGlobal.Event2);
+            events.Event3 = seatgeekItemsGlobal.Event3.concat(meetupItemsGlobal.Event3);
+            events.Event4 = seatgeekItemsGlobal.Event4.concat(meetupItemsGlobal.Event4);
 
-
+            var itineraries = formatAllData(yelpItemsGlobal, events);
+            if (!misc.isEmpty(itineraries)) {
+                res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
+            }
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
+        });
 });
 
 
 // ------------- Yelp API Stuff
 
 // Get initial data length from Yelp
-function getYelpDataLength(term_in, location_in) {
+function getYelpDataLength(term_in, latlon_in) {
     return new Promise(function (resolve, reject) {
         client.search({
             term: term_in,
-            location: location_in,
+            location: latlon_in,
             limit: 50,
         }).then(response => {
             var total = response.jsonBody.total;
@@ -77,18 +114,19 @@ function getYelpDataLength(term_in, location_in) {
 
 
 // Format all data
-function formatAllData(yelpItems, meetupItems) {
+function formatAllData(yelpItems, events) {
     try {
         var numYelpItems = yelpItems.length;
-        var numEvent1  = meetupItems.Event1.length;
-        var numEvent2  = meetupItems.Event2.length;
-        var numEvent3  = meetupItems.Event3.length;
-        var numEvent4  = meetupItems.Event4.length;
+        var numEvent1  = events.Event1.length;
+        var numEvent2  = events.Event2.length;
+        var numEvent3  = events.Event3.length;
+        var numEvent4  = events.Event4.length;
+        console.log("---------------------formatAllData Function---------------------")
         console.log("numYelpItems: " + numYelpItems)
-        console.log("numMeetupItems1: " + numEvent1)
-        console.log("numMeetupItems2: " + numEvent2)
-        console.log("numMeetupItems3: " + numEvent3)
-        console.log("numMeetupItems4: " + numEvent4)
+        console.log("events1: " + numEvent1)
+        console.log("events2: " + numEvent2)
+        console.log("events3: " + numEvent3)
+        console.log("events4: " + numEvent4)
         var itemIntervalYelp = Math.floor(numYelpItems / 3);
         var itineraries = [];
 
@@ -103,16 +141,16 @@ function formatAllData(yelpItems, meetupItems) {
             for (var i = 0; i <= 7; i++) {
                 if (i == 0) {
                     key = 'Event1';
-                    items = meetupItems.Event1;
+                    items = events.Event1;
                 } else if (i == 2) {
                     key = 'Event2';
-                    items = meetupItems.Event2;
+                    items = events.Event2;
                 } else if (i == 4) {
                     key = 'Event3';
-                    items = meetupItems.Event3;
+                    items = events.Event3;
                 } else if (i == 6) {
                     key = 'Event4';
-                    items = meetupItems.Event4;
+                    items = events.Event4;
                 } else if (i == 1) {
                     key = 'Breakfast';
                     var tempYelpItems = yelpItems.slice(0, itemIntervalYelp);

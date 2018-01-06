@@ -9,8 +9,6 @@ module.exports = {
     // Get  data from Meetup
     getMeetupData: function(location_in) {
         //Meetup
-
-        console.log(meetup);
         return new Promise(function (resolve, reject) {
             try {
                 //Initialize

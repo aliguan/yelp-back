@@ -45,5 +45,12 @@ module.exports = {
     processTime: function (time) {
         time = time.substring(16,21); // hard coded !!! may want to do some checks
         return time = time.replace(":","");
+    },
+
+    // Get the military time out from the date
+    // input format is like: 2018-01-06T10:00:00
+    processTimeSG: function (time) {
+        time = time.substring(11,16); // hard coded !!! may want to do some checks
+        return time = time.replace(":","");
     }
 }
