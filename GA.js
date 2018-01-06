@@ -2,6 +2,8 @@ module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
       // comment
+      
+      // Version control is confusing
       //herro difhgslidfhglsdfhg
       //f seuhrglisdhfgshergliuhse hi try 3
       // Format data
