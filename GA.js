@@ -1,10 +1,11 @@
 module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
- 
+
       // Format data
-      // test again 5
-      
+      // test again 6
+      //poop monster
+
       var parsedDataAll = this.preProcessData(allData);
       if (parsedDataAll == 0) return 0;
 
