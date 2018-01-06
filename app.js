@@ -42,8 +42,8 @@ app.use(cors());
 const index = require('./routes/index');
 app.use('/', index);
 
-const yelpRouter = require('./routes/yelp-router');
-app.use('/api', yelpRouter);
+const apiRouter = require('./routes/api-router');
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
