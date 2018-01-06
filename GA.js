@@ -1,16 +1,7 @@
 module.exports = {
     // categories: breakfast, lunch, dinner, event
     doGA: function(allData, budgetmax_in, budgetmin_in) {
-      // comment
-      
-      // Version control is confusing
-      //herro difhgslidfhglsdfhg
-<<<<<<< HEAD
-
-      // test again 2
-=======
-      //f seuhrglisdhfgshergliuhse hi try 3
->>>>>>> refs/remotes/origin/master
+ 
       // Format data
 
       var parsedDataAll = this.preProcessData(allData);
