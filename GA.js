@@ -3,9 +3,6 @@ module.exports = {
     doGA: function(allData, budgetmax_in, budgetmin_in) {
  
       // Format data
-
-
-      // test again 4
       var parsedDataAll = this.preProcessData(allData);
       if (parsedDataAll == 0) return 0;
 
