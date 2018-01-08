@@ -7,6 +7,7 @@ const genAlgo = require('../GA.js');
 const yelpApi = require('../externalApis/yelpapi.js');
 const meetupApi = require('../externalApis/meetupapi.js');
 const seatgeekApi = require('../externalApis/seatgeekapi.js');
+const eventbriteApi = require('../externalApis/eventbriteapi.js');
 const misc = require('../miscfuncs/misc.js');
 
 const clientId = process.env.CLIENT_ID;
@@ -50,7 +51,7 @@ apiRouter.post('/', (req, res, next) => {
         }).catch(function (e) {
             console.log(e)
         }).then(function (seatgeekEvents) {
-            
+
             seatgeekItemsGlobal = seatgeekEvents;
             console.log("---------------------Seatgeek API returned data check---------------------")
             console.log(seatgeekItemsGlobal.Event1[0]);
@@ -63,7 +64,7 @@ apiRouter.post('/', (req, res, next) => {
             console.log(meetupItemsGlobal.Event3[0]);
             console.log(meetupItemsGlobal.Event4[0]);
             console.log("---------------------yelp API returned data check---------------------")
-            console.log(yelpItemsGlobal[0]);      
+            console.log(yelpItemsGlobal[0]);
             console.log(yelpItemsGlobal[1]);
             console.log(yelpItemsGlobal[2]);
             console.log(yelpItemsGlobal[3]);
@@ -84,10 +85,14 @@ apiRouter.post('/', (req, res, next) => {
             if (!misc.isEmpty(itineraries)) {
                 res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
             }
+            // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
+            return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);
         }, function (err) {
             return err;
         }).catch(function (e) {
             console.log(e)
+        }).then(function(eventbriteEvents) {
+
         });
 });
 
