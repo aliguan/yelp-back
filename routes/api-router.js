@@ -1,5 +1,4 @@
 'use strict';
-
 const express = require('express');
 const apiRouter = express.Router();
 const yelp = require('yelp-fusion');
@@ -19,6 +18,7 @@ apiRouter.post('/', (req, res, next) => {
     var yelpItemsGlobal;
     var meetupItemsGlobal;
     var seatgeekItemsGlobal;
+    var date = new Date(req.body.date);
 
     // Promise Chain of API calls
 
@@ -36,7 +36,7 @@ apiRouter.post('/', (req, res, next) => {
         .then(function (yelpItems) {
             yelpItemsGlobal = yelpItems;
             // 3. fulfilled promise returned from getMeetupData is an array of object arrays
-            return meetupApi.getMeetupData(req.body.latlon);
+            return meetupApi.getMeetupData(req.body.latlon, date);
         }, function (err) {
             return err;
         }).catch(function (e) {
@@ -44,7 +44,7 @@ apiRouter.post('/', (req, res, next) => {
         }).then(function (meetupEvents) {
             meetupItemsGlobal = meetupEvents;
              // 4. fulfilled promise returned from getSeatGeekData is an array of object arrays
-            return seatgeekApi.getSeatGeekData(req.body.city);
+            return seatgeekApi.getSeatGeekData(req.body.city, date);
         }, function (err) {
             return err;
         }).catch(function (e) {
@@ -81,8 +81,11 @@ apiRouter.post('/', (req, res, next) => {
             events.Event4 = seatgeekItemsGlobal.Event4.concat(meetupItemsGlobal.Event4);
 
             var itineraries = formatAllData(yelpItemsGlobal, events);
-            if (!misc.isEmpty(itineraries)) {
+            if (!misc.isEmpty(itineraries) && itineraries!= -1) {
                 res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
+            }
+            else {
+                res.send(['No Itineraries found.','','','','','',''])
             }
         }, function (err) {
             return err;
@@ -177,7 +180,7 @@ function formatAllData(yelpItems, events) {
             return itineraries;
         } else {
             console.log("Not enough items")
-            return itineraries;
+            return -1;
         }
     }
     catch (e) {
