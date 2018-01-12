@@ -61,5 +61,9 @@ module.exports = {
     processDateSG: function (time) {
         time = time.substring(0,10); // hard coded !!! may want to do some checks
         return time = time.replace(":","");
+    },
+
+    round2NearestHundredth: function (number) {
+        return Math.round(100*number)/100;
     }
 }

@@ -62,6 +62,8 @@ module.exports = {
                             if (!misc.isEmpty(events.events[i].fee)) {
                                 meetupFee = events.events[i].fee.amount;
                             }
+                            meetupFee = misc.round2NearestHundredth(meetupFee);
+                            
                             var item = {
                                 name: "meetup: " +events.events[i].group.name + ": " + events.events[i].name + 
                                 ", Date/Time: " + events.events[i].local_date + "/" + time,
