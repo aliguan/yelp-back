@@ -24,7 +24,7 @@ module.exports = {
                 // i.e. if date_in is wed, jan 10, 2018, 9 pm. 
                 // The returned date is jan 11, 2018, 2 am.
                 var today = MISC.getDate(date_in, -1);
-                // console.log("today: " + today)
+                console.log("sg location: " + city_in)
 
                 //Do the seatgeek API call using seatgeek.js
                 seatgeek.events({
