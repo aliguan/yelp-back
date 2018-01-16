@@ -1,86 +1,37 @@
-const eventbrite = require('node-eventbrite');
 const token = process.env.EVENTBRITE_TOKEN;
 const misc = require('../miscfuncs/misc.js');
+const request = require('request');
 
 module.exports = {
-    getEventbriteData: function(term_query, latlon, city=false) {
+    getEventbriteData: function(term_query, latlon, city) {
         // ACCESS EVENTBRITE API
-        try {
-            var ebapi = eventbrite({
-                token: token,
-                version: 'v3'
-            });
-        } catch (e) {
-            console.log('EVENTBRITE AUTH ERROR -----> ' + e.message);
+
+        var base_url = 'https://www.eventbriteapi.com/v3/'
+
+        var latlongarray = misc.processLocationString(latlon);
+
+        var latitude = latlongarray[0];
+        var longitude = latlongarray[1];
+
+        var options = {
+            url: base_url + 'events/search',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            qs: {'q': term_query, 'location.latitude': latitude, 'location.longitude': longitude, 'start_date.keyword': 'today' }
+            // qs: {'q': term_query, 'location.city': city }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+                console.log(JSON.stringify(response));
+                console.log(body);
+            } else {
+                console.log(error);
+            }
         }
 
-        var coordinates = misc.processLocationString(latlon);
+        request(options, callback);
 
-        var latitude = coordinates[0];
-        var longitude = coordinates[1];
-        console.log(latitude,longitude);
-        // SEARCH EVENTBRITE API
-        //FIRST API CALL TO FIND NUMBER OF PAGES OF RESULTs
-        ebapi.search({
-            q: term_query,
-            location: {
-                latitude: latitude,
-                longitude: longitude,
-                within: '25 mi',
-            },
-            start_date: {
-                keyword: 'today'
-            },
-            page: 1,
-        }, function(e, data) {
-                // Handle first api call
-                if(e) {
-                    console.log('EVENTBRITE FIRSTCALL ERROR ----> ' + e.message);
-                } else {
-                    var eventbriteEvents = [];
-
-                    data.events.forEach(function(event) {
-                        var item = {
-                            name: event.name.text,
-                            cost: 0,
-                            rating: 2.5,
-                            // time: event.start,
-                            // url: event.url,
-                        }
-                        eventbriteEvents.push(item);
-                    });
-                    console.log(data.pagination);
-                    var pages = data.pagination.page_count;
-
-                    for(var i = 2; i <= pages; i++ ) {
-                        ebapi.search({
-                            q: term_query,
-                            location: {
-                                latitude: latitude,
-                                longitude: longitude,
-                                within: '25 mi'
-                            },
-                            start_date: {
-                                keyword: 'today'
-                            },
-                            page: i
-                        }, function(e, data) {
-                            console.log('------------------ page ---' + data.pagination.page_number);
-                            data.events.forEach(function(event) {
-                                var item = {
-                                    name: event.name.text,
-                                    cost: 0,
-                                    rating: 2.5,
-                                    // time: event.start,
-                                    // url: event.url,
-                                }
-                                console.log(event.name.text);
-                            });
-                        });
-                    }
-                    // console.log(eventbriteEvents);
-                }
-            }
-        );
     },
 }
