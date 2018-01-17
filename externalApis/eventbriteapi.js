@@ -18,14 +18,23 @@ module.exports = {
             headers: {
                 'Authorization': 'Bearer ' + token
             },
-            qs: {'q': term_query, 'location.latitude': latitude, 'location.longitude': longitude, 'start_date.keyword': 'today' }
+            qs: {
+                'q': term_query,
+                'location.latitude': latitude,
+                'location.longitude': longitude,
+                'start_date.keyword': "today",
+            }
             // qs: {'q': term_query, 'location.city': city }
         };
 
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
-                console.log(JSON.stringify(response));
+                // console.log(response);
                 console.log(body);
+
+                // body.top_match_events.foreach(function(event) {
+                //     console.log(event.name.text);
+                // });
             } else {
                 console.log(error);
             }
