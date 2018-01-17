@@ -1,5 +1,4 @@
 'use strict';
-
 const express = require('express');
 const apiRouter = express.Router();
 const yelp = require('yelp-fusion');
@@ -7,7 +6,7 @@ const genAlgo = require('../GA.js');
 const yelpApi = require('../externalApis/yelpapi.js');
 const meetupApi = require('../externalApis/meetupapi.js');
 const seatgeekApi = require('../externalApis/seatgeekapi.js');
-const eventbriteApi = require('../externalApis/eventbriteapi.js');
+const yelpEventApi = require('../externalApis/yelpeventsapi.js');
 const misc = require('../miscfuncs/misc.js');
 
 const clientId = process.env.CLIENT_ID;
@@ -20,6 +19,8 @@ apiRouter.post('/', (req, res, next) => {
     var yelpItemsGlobal;
     var meetupItemsGlobal;
     var seatgeekItemsGlobal;
+    var yelpEventsGlobal;
+    var date = new Date(req.body.date);
 
     // Promise Chain of API calls
 
@@ -37,22 +38,32 @@ apiRouter.post('/', (req, res, next) => {
         .then(function (yelpItems) {
             yelpItemsGlobal = yelpItems;
             // 3. fulfilled promise returned from getMeetupData is an array of object arrays
-            return meetupApi.getMeetupData(req.body.latlon);
+            return meetupApi.getMeetupData(req.body.latlon, date);
         }, function (err) {
             return err;
         }).catch(function (e) {
             console.log(e)
-        }).then(function (meetupEvents) {
+        })
+        .then(function (meetupEvents) {
             meetupItemsGlobal = meetupEvents;
-             // 4. fulfilled promise returned from getSeatGeekData is an array of object arrays
-            return seatgeekApi.getSeatGeekData(req.body.city);
+            // 4. fulfilled promise returned from getSeatGeekData is an array of object arrays
+            return seatgeekApi.getSeatGeekData(req.body.city, date);
         }, function (err) {
             return err;
         }).catch(function (e) {
             console.log(e)
-        }).then(function (seatgeekEvents) {
-
+        })
+        .then(function (seatgeekEvents) {
             seatgeekItemsGlobal = seatgeekEvents;
+           // return yelpEventApi.getYelpEventData(date, req.body.latlon, client);
+           return 1;
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
+        })
+        .then(function (yelpEvents) {
+
             console.log("---------------------Seatgeek API returned data check---------------------")
             console.log(seatgeekItemsGlobal.Event1[0]);
             console.log(seatgeekItemsGlobal.Event2[0]);
@@ -82,11 +93,16 @@ apiRouter.post('/', (req, res, next) => {
             events.Event4 = seatgeekItemsGlobal.Event4.concat(meetupItemsGlobal.Event4);
 
             var itineraries = formatAllData(yelpItemsGlobal, events);
-            if (!misc.isEmpty(itineraries)) {
+            if (!misc.isEmpty(itineraries) && itineraries!= -1) {
                 res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
             }
             // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
             return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);
+
+        } else {
+                res.send(['No Itineraries found.','','','','','',''])
+            }
+
         }, function (err) {
             return err;
         }).catch(function (e) {
@@ -182,7 +198,7 @@ function formatAllData(yelpItems, events) {
             return itineraries;
         } else {
             console.log("Not enough items")
-            return itineraries;
+            return -1;
         }
     }
     catch (e) {
