@@ -98,11 +98,7 @@ apiRouter.post('/', (req, res, next) => {
             }
             // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
             return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);
-
-        } else {
-                res.send(['No Itineraries found.','','','','','',''])
-            }
-
+            
         }, function (err) {
             return err;
         }).catch(function (e) {
