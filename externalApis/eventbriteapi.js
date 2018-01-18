@@ -30,7 +30,11 @@ module.exports = {
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
                 // console.log(response);
-                console.log(body);
+                var events = JSON.parse(response.body);
+                console.log(response);
+                events.top_match_events.forEach(function(event) {
+                    console.log(event.name.text);
+                })
 
                 // body.top_match_events.foreach(function(event) {
                 //     console.log(event.name.text);
