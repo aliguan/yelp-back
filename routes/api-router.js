@@ -6,6 +6,7 @@ const genAlgo = require('../GA.js');
 const yelpApi = require('../externalApis/yelpapi.js');
 const meetupApi = require('../externalApis/meetupapi.js');
 const seatgeekApi = require('../externalApis/seatgeekapi.js');
+const eventbriteApi = require('../externalApis/eventbriteapi.js');
 const yelpEventApi = require('../externalApis/yelpeventsapi.js');
 const misc = require('../miscfuncs/misc.js');
 
@@ -54,6 +55,7 @@ apiRouter.post('/', (req, res, next) => {
             console.log(e)
         })
         .then(function (seatgeekEvents) {
+
             seatgeekItemsGlobal = seatgeekEvents;
            // return yelpEventApi.getYelpEventData(date, req.body.latlon, client);
            return 1;
@@ -96,9 +98,10 @@ apiRouter.post('/', (req, res, next) => {
             if (!misc.isEmpty(itineraries) && itineraries!= -1) {
                 res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
             }
+
             // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
             return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);
-            
+
         }, function (err) {
             return err;
         }).catch(function (e) {

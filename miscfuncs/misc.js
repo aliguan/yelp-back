@@ -5,11 +5,9 @@ module.exports = {
         return Math.floor(Math.random() * (max - min)) + min;
     },
 
-    // Returns a date string in the YYYY-MM-DDTHH:MM:SS format with date input, converts it to that date at
-    // zero hours and adds "daysAhead" plus 26 hours (effectively 2 am).
-    // This function is used in the meetup API call
-    getDate: function(date, daysAhead) {
-        var today = new Date(date);
+    // Returns a date string in the YYYY-MM-DDTHH:MM:SS format with date x days ahead of today
+    getDate: function(daysAhead) {
+        var today = new Date();
         today.setDate(today.getDate() + daysAhead + 1);
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -54,16 +52,5 @@ module.exports = {
     processTimeSG: function (time) {
         time = time.substring(11,16); // hard coded !!! may want to do some checks
         return time = time.replace(":","");
-    },
-
-    // Get the date from the following input
-    // input format is like: 2018-01-06T10:00:00
-    processDateSG: function (time) {
-        time = time.substring(0,10); // hard coded !!! may want to do some checks
-        return time = time.replace(":","");
-    },
-
-    round2NearestHundredth: function (number) {
-        return Math.round(100*number)/100;
     }
 }

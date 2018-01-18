@@ -5,9 +5,6 @@ module.exports = {
         return new Promise(function (resolve, reject) {
 
             var total = total_in;
-            if (total > 1000) {
-                total = 1000;
-            }
             var count = 0;
             var businesses = [];
             var itineraries = [];
