@@ -98,6 +98,9 @@ apiRouter.post('/', (req, res, next) => {
             if (!misc.isEmpty(itineraries) && itineraries!= -1) {
                 res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
             }
+            else {
+                res.send(['No Itineraries found.','','','','','',''])
+            }
 
             // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
             return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);

@@ -1,13 +1,13 @@
 const misc = require('../miscfuncs/misc.js');
 
-var meetup = require('../node_modules/meetup-api/lib/meetup')({
+const meetup = require('../node_modules/meetup-api/lib/meetup')({
     key: process.env.MEETUP_KEY
 });
 
 module.exports = {
     // ------------- Meetup API Stuff
     // Get  data from Meetup
-    getMeetupData: function(location_in) {
+    getMeetupData: function(location_in, date_in) {
         //Meetup
         return new Promise(function (resolve, reject) {
             try {
@@ -20,8 +20,11 @@ module.exports = {
                     Event3: [],
                     Event4: []
                 };
-                var count = 0;
-                var date = misc.getDate(20); // a date x days from now (need to change to get input from user)
+                var dateEnd = misc.getDate(date_in,0); // returns a string with a date in the format:
+                                                       // YYYY-MM-DDTHH:MM:SS of the date_in + 1 date at 2:00 am
+                                                       // i.e. if date_in is wed, jan 10, 2018, 9 pm. 
+                                                       // The returned date is jan 11, 2018, 2 am.
+                var today = misc.getDate(date_in, -1);
                 var meetupFee;
 
                 // API call
@@ -30,14 +33,16 @@ module.exports = {
                     lon: latLongArray[1],
                     radius: 'smart',
                     order: 'time',
-                    end_date_range: date,
-                    page: 50,
+                    end_date_range: dateEnd, 
+                    start_date_range: today, // default start date and time is the current date and time
+                    page: 100,
                 }, function (error, events) {
                     if (error) {
                         console.log(error);
                         reject(-1);
                     } else {
                         var numOfEvents = events.events.length;
+                        var eventCnt = 0;
                         for (var i = 0; i < numOfEvents; i++) {
 
                             // Get the event time
@@ -57,8 +62,11 @@ module.exports = {
                             if (!misc.isEmpty(events.events[i].fee)) {
                                 meetupFee = events.events[i].fee.amount;
                             }
+                            meetupFee = misc.round2NearestHundredth(meetupFee);
+                            
                             var item = {
-                                name: events.events[i].group.name+ ": " + events.events[i].name + " Time: " + time,
+                                name: "meetup: " +events.events[i].group.name + ": " + events.events[i].name + 
+                                ", Date/Time: " + events.events[i].local_date + "/" + time,
                                 cost: meetupFee,
                                 rating: meetupFee*2 + 5, //need to change!!!!
                             }
@@ -66,18 +74,23 @@ module.exports = {
                             // Categorize the events by time
                             if (time <= 200) {
                                 meetupEvents.Event4.push(item);
+                                eventCnt++;
                             }
                             else if (time <= 900) {
                                 meetupEvents.Event1.push(item);
+                                eventCnt++;
                             }
                             else if (time <= 1200) {
                                 meetupEvents.Event2.push(item);
+                                eventCnt++;
                             }
                             else if (time <= 1800) {
                                 meetupEvents.Event3.push(item);
+                                eventCnt++;
                             }
                             else if (time < 2400) {
                                 meetupEvents.Event4.push(item);
+                                eventCnt++;
                             }
 
                             // Add a "none" itinerary item
@@ -90,10 +103,11 @@ module.exports = {
                                 meetupEvents.Event1.push(item);
                                 meetupEvents.Event2.push(item);
                                 meetupEvents.Event3.push(item);
-                                meetupEvents.Event4.push(item);
+                                meetupEvents.Event4.push(item);                                
                             }
                         }
 
+                        console.log("number of meetup events: " + eventCnt)
                         // resolve the promise
                         // returned object is a object of arrays of objects with keys:
                         //  Event1 ... Event4
