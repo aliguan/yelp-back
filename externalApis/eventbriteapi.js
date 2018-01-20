@@ -31,10 +31,32 @@ module.exports = {
           if (!error && response.statusCode == 200) {
                 // console.log(response);
                 var events = JSON.parse(response.body);
-                console.log(response);
-                events.top_match_events.forEach(function(event) {
-                    console.log(event.name.text);
-                })
+
+                if(events.events.length > 0 ) {
+                    var eventbriteItems = [];
+                    var cost;
+
+                    events.events.forEach(function(event, index, array) {
+                        if(event.is_free == false) {
+                            cost = 10;
+                        } else {
+                            cost = 0;
+                        }
+                        var item = {
+                            name: event.name.text,
+                            cost: cost,
+                            rating: (cost * 2) + 5,
+                        };
+
+                        eventbriteItems.push(item);
+
+                        if(events.events.length == index + 1) {
+                            console.log(eventbriteItems);
+                        }
+                    });
+
+                }
+
 
                 // body.top_match_events.foreach(function(event) {
                 //     console.log(event.name.text);
