@@ -21,6 +21,7 @@ apiRouter.post('/', (req, res, next) => {
     var meetupItemsGlobal;
     var seatgeekItemsGlobal;
     var yelpEventsGlobal;
+    var eventbriteGlobal
     var date = new Date(req.body.date);
 
     // Promise Chain of API calls
@@ -66,6 +67,16 @@ apiRouter.post('/', (req, res, next) => {
         })
         .then(function (yelpEvents) {
 
+            return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city, date);
+
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
+        }).then(function(eventbriteEvents) {
+
+            eventbriteGlobal = eventbriteEvents;
+
             console.log("---------------------Seatgeek API returned data check---------------------")
             console.log(seatgeekItemsGlobal.Event1[0]);
             console.log(seatgeekItemsGlobal.Event2[0]);
@@ -81,6 +92,11 @@ apiRouter.post('/', (req, res, next) => {
             console.log(yelpItemsGlobal[1]);
             console.log(yelpItemsGlobal[2]);
             console.log(yelpItemsGlobal[3]);
+            console.log("---------------------eventbrite API returned data check---------------------")
+            console.log(eventbriteGlobal.Event1[0]);
+            console.log(eventbriteGlobal.Event2[0]);
+            console.log(eventbriteGlobal.Event3[0]);
+            console.log(eventbriteGlobal.Event4[0]);
 
             // Consolidate all events by concatenation
             var events = {
@@ -89,10 +105,10 @@ apiRouter.post('/', (req, res, next) => {
                 Event3: [],
                 Event4: []
             };
-            events.Event1 = seatgeekItemsGlobal.Event1.concat(meetupItemsGlobal.Event1);
-            events.Event2 = seatgeekItemsGlobal.Event2.concat(meetupItemsGlobal.Event2);
-            events.Event3 = seatgeekItemsGlobal.Event3.concat(meetupItemsGlobal.Event3);
-            events.Event4 = seatgeekItemsGlobal.Event4.concat(meetupItemsGlobal.Event4);
+            events.Event1 = seatgeekItemsGlobal.Event1.concat(meetupItemsGlobal.Event1).concat(eventbriteGlobal.Event1);
+            events.Event2 = seatgeekItemsGlobal.Event2.concat(meetupItemsGlobal.Event2).concat(eventbriteGlobal.Event2);
+            events.Event3 = seatgeekItemsGlobal.Event3.concat(meetupItemsGlobal.Event3).concat(eventbriteGlobal.Event3);
+            events.Event4 = seatgeekItemsGlobal.Event4.concat(meetupItemsGlobal.Event4).concat(eventbriteGlobal.Event4);
 
             var itineraries = formatAllData(yelpItemsGlobal, events);
             if (!misc.isEmpty(itineraries) && itineraries!= -1) {
@@ -102,14 +118,6 @@ apiRouter.post('/', (req, res, next) => {
                 res.send(['No Itineraries found.','','','','','',''])
             }
 
-            // EVENT USER INPUT? ex. "what do you want to do?" "Sports, Music, etc."
-            return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city);
-
-        }, function (err) {
-            return err;
-        }).catch(function (e) {
-            console.log(e)
-        }).then(function(eventbriteEvents) {
 
         });
 });

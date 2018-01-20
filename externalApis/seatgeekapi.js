@@ -21,7 +21,7 @@ module.exports = {
                 // Determine the date to query the events
                 var dateEnd = MISC.getDate(date_in, 0); // returns a string with a date in the format:
                 // YYYY-MM-DDTHH:MM:SS of the date_in + 1 date at 2:00 am
-                // i.e. if date_in is wed, jan 10, 2018, 9 pm. 
+                // i.e. if date_in is wed, jan 10, 2018, 9 pm.
                 // The returned date is jan 11, 2018, 2 am.
                 var today = MISC.getDate(date_in, -1);
                 console.log("sg location: " + city_in)
@@ -45,7 +45,7 @@ module.exports = {
                             var eventCnt = 0;
                             // console.log(events.events[0])
                             for (var i = 0; i < numOfEvents; i++) {
-                                
+
 
                                 // Get the event time
                                 var time = events.events[i].datetime_local;
