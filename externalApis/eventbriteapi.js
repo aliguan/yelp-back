@@ -35,7 +35,6 @@ module.exports = {
                 events.top_match_events.forEach(function(event) {
                     console.log(event.name.text);
                 })
-
                 // body.top_match_events.foreach(function(event) {
                 //     console.log(event.name.text);
                 // });
