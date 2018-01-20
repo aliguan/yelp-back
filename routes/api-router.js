@@ -58,15 +58,14 @@ apiRouter.post('/', (req, res, next) => {
         .then(function (seatgeekEvents) {
 
             seatgeekItemsGlobal = seatgeekEvents;
-           // return yelpEventApi.getYelpEventData(date, req.body.latlon, client);
-           return 1;
+            return yelpEventApi.getYelpEventData(date, req.body.latlon, client);
         }, function (err) {
             return err;
         }).catch(function (e) {
             console.log(e)
         })
         .then(function (yelpEvents) {
-
+            yelpEventsGlobal = yelpEvents;
             return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city, date);
 
         }, function (err) {
@@ -119,6 +118,10 @@ apiRouter.post('/', (req, res, next) => {
             }
 
 
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
         });
 });
 

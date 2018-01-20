@@ -13,7 +13,6 @@ module.exports = {
             try {
                 //Initialize
                 var latLongArray = misc.processLocationString(location_in);
-                var meetupEventsTest = [];
                 var meetupEvents = {
                     Event1: [],
                     Event2: [],
