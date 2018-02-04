@@ -2,7 +2,6 @@
 const express = require('express');
 const apiRouter = express.Router();
 const yelp = require('yelp-fusion');
-const genAlgo = require('../GA.js');
 const yelpApi = require('../externalApis/yelpapi.js');
 const meetupApi = require('../externalApis/meetupapi.js');
 const seatgeekApi = require('../externalApis/seatgeekapi.js');
@@ -111,10 +110,10 @@ apiRouter.post('/', (req, res, next) => {
 
             var itineraries = formatAllData(yelpItemsGlobal, events);
             if (!misc.isEmpty(itineraries) && itineraries!= -1) {
-                res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
+                res.send(itineraries);
             }
             else {
-                res.send(['No Itineraries found.','','','','','',''])
+                res.send([])
             }
 
 
