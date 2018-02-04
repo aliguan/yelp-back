@@ -111,7 +111,7 @@ apiRouter.post('/', (req, res, next) => {
 
             var itineraries = formatAllData(yelpItemsGlobal, events);
             if (!misc.isEmpty(itineraries) && itineraries!= -1) {
-                res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin));
+                res.send(genAlgo.doGA(itineraries, req.body.budgetmax, req.body.budgetmin, req.body.savedEvents));
             }
             else {
                 res.send(['No Itineraries found.','','','','','',''])

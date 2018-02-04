@@ -1,179 +1,165 @@
 module.exports = {
     // categories: breakfast, lunch, dinner, event
-    doGA: function(allData, budgetmax_in, budgetmin_in) {
+    doGA: function(allData, budgetmax_in, budgetmin_in, savedEvents) {
 
-    //   // Format data
-    //   var parsedDataAll = this.preProcessData(allData);
-    //   if (parsedDataAll == 0) return 0;
-    //
-    //   // Initialize constants for GA
-    //   var maxIter = 100*2; //100;                              // max iterations
-    //   var itinerarySize = 7;                          // number of things to do in the day
-    //   var elitek = 5; //1                                // number of elite iteneraries passed onto the next generation
-    //   var popSize = 60 + elitek;                      // population size for each generation
-    //   var crossRate = 50;                             // crossover rate (%)
-    //   var mutateRate = 85;                            // mutation rate (%)
-    //   var numItemsArray = new Array(itinerarySize);
-    //   numItemsArray = parsedDataAll.numItemsArrayOut.slice();
-    //   var tempItinerary = new Array(itinerarySize);
-    //   var childItinerary = new Array(itinerarySize);
-    //   var itineraryPopulation = new Array(popSize);   // population array (array of arrays)
-    //   var newItineraryPop = new Array(popSize);
-    //   var allItineraryRatings = new Array(popSize);
-    //   var allItineraryRatingsSum = 0;
-    //   var bestItinerary = new Array(itinerarySize);
-    //   var crossedItineraryArray;
-    //   var iBestItinerary;
-    //   var bestItineraryObj;
-    //   var bestRating;
-    //   var bestCost;
-    //   var irand;
-    //   var budgetmax = parseFloat(budgetmax_in); // error check?
-    //   var budgetmin = parseFloat(budgetmin_in); // error check?
-    //   console.log("budgetmax: " + budgetmax)
-    //   console.log("budgetmin: " + budgetmin)
-    //
-    //   // Create first population to initialize GA
-    //   itineraryPopulation = this.initializePopulation(popSize, itinerarySize, numItemsArray);
-    //   //console.log("Initial Population:")
-    //   //console.log(itineraryPopulation);
-    //   console.log("---------------------gen algo start---------------------")
-    //
-    //   // Find the "fittest" itinerary and return some itinerary stats
-    //   bestItineraryObj       = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
-    //   iBestItinerary         = bestItineraryObj.bestItineraryOut;
-    //   bestRating             = bestItineraryObj.bestItineraryRatingOut;
-    //   bestCost               = bestItineraryObj.bestItineraryCostOut;
-    //   allItineraryRatings    = bestItineraryObj.allItineraryRatingsOut;
-    //   allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
-    //
-    //   for (var i = 0; i < maxIter; i++) {
-    //     // Construct new population of itineraries
-    //     popCnt = 0;
-    //
-    //     // Populate with the elite itineraries first
-    //     for (var j = 0; j < elitek; j++) {
-    //       newItineraryPop[j] = [iBestItinerary[0],
-    //       iBestItinerary[1],
-    //       iBestItinerary[2],
-    //       iBestItinerary[3],
-    //       iBestItinerary[4],
-    //       iBestItinerary[5],
-    //       iBestItinerary[6]];
-    //       popCnt = popCnt + 1;
-    //     }
-    //
-    //     // Breed/select other itineraries
-    //     while (popCnt < popSize) {
-    //
-    //       // Pick two itineraries
-    //       var iItineraryPick1 = 0;
-    //       var iItineraryPick2 = 0;
-    //
-    //       // Use roulette selection or randomized
-    //       var pick = randomIntFromInterval(1, 2);
-    //       if (pick == 1) {
-    //         iItineraryPick1 = rouletteSelect(allItineraryRatings, allItineraryRatingsSum);
-    //         iItineraryPick2 = rouletteSelect(allItineraryRatings, allItineraryRatingsSum);
-    //       }
-    //       else {
-    //         iItineraryPick1 = randomIntFromInterval(0, popSize - 1);
-    //         iItineraryPick2 = pickRandomItineraryItemExcluding(popSize, iItineraryPick1);
-    //       }
-    //
-    //       var tempItinerary1 = itineraryPopulation[iItineraryPick1];
-    //       var tempItinerary2 = itineraryPopulation[iItineraryPick2];
-    //
-    //       // Crossover the two itineraries if randomly chosen to do so
-    //       irand = randomIntFromInterval(1, 100);
-    //       if (irand < crossRate) {
-    //         crossedItineraryArray = crossover(tempItinerary1, tempItinerary2);
-    //         tempItinerary1 = [crossedItineraryArray[0][0], crossedItineraryArray[0][1], crossedItineraryArray[0][2], crossedItineraryArray[0][3],
-    //         crossedItineraryArray[0][4], crossedItineraryArray[0][5], crossedItineraryArray[0][6]];
-    //         tempItinerary2 = [crossedItineraryArray[1][0], crossedItineraryArray[1][1], crossedItineraryArray[1][2], crossedItineraryArray[1][3],
-    //         crossedItineraryArray[1][4], crossedItineraryArray[1][5], crossedItineraryArray[1][6]];
-    //       }
-    //
-    //       // Mutate the two itineraries if randomly chosen to do so
-    //       irand = randomIntFromInterval(1, 100);
-    //       if (irand < mutateRate) {
-    //         tempItinerary1 = mutate(tempItinerary1, numItemsArray);
-    //       }
-    //
-    //       irand = randomIntFromInterval(1, 100);
-    //       if (irand < mutateRate) {
-    //         tempItinerary2 = mutate(tempItinerary2, numItemsArray);
-    //       }
-    //
-    //       // Append newly bred itineraries to current population
-    //       newItineraryPop[popCnt] = [tempItinerary1[0], tempItinerary1[1], tempItinerary1[2], tempItinerary1[3],
-    //       tempItinerary1[4], tempItinerary1[5], tempItinerary1[6]];
-    //       newItineraryPop[popCnt + 1] = [tempItinerary2[0], tempItinerary2[1], tempItinerary2[2], tempItinerary2[3],
-    //       tempItinerary2[4], tempItinerary2[5], tempItinerary2[6]];
-    //       popCnt = popCnt + 2;
-    //     } // end while loop
-    //
-    //     itineraryPopulation = newItineraryPop.slice(0);
-    //     bestItineraryObj = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
-    //     iBestItinerary = bestItineraryObj.bestItineraryOut;
-    //     bestRating = bestItineraryObj.bestItineraryRatingOut;
-    //     bestCost = bestItineraryObj.bestItineraryCostOut;
-    //     allItineraryRatings = bestItineraryObj.allItineraryRatingsOut;
-    //     allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
-    //
-    //     if (i % 50 == 0) {
-    //     console.log("best rating at " + i + "th iteration: " + bestRating);
-    //     console.log("best cost at " + i + "th iteration: " + bestCost);
-    //     console.log("population rating sum: " + i + "th iteration: " + allItineraryRatingsSum);
-    //   }
-    //
-    // } // end maxIter loop
-    // console.log("---------------------gen algo end---------------------")
-    // //console.log("End population")
-    // //console.log(itineraryPopulation)
-    // console.log("best rating: " + bestRating);
-    // console.log("best cost: " + bestCost);
-    // console.log("population rating sum: " + allItineraryRatingsSum);
-    // if (bestRating > 0) {
-    //   bestItinerary[0] = allData[0].Event1[iBestItinerary[0]].name + " - $" + allData[0].Event1[iBestItinerary[0]].cost + ", Rating: " + allData[0].Event1[iBestItinerary[0]].rating;
-    //   bestItinerary[1] = allData[1].Breakfast[iBestItinerary[1]].name + " - $" + allData[1].Breakfast[iBestItinerary[1]].cost + ", Rating: " + allData[1].Breakfast[iBestItinerary[1]].rating;
-    //   bestItinerary[2] = allData[2].Event2[iBestItinerary[2]].name + " - $" + allData[2].Event2[iBestItinerary[2]].cost + ", Rating: " + allData[2].Event2[iBestItinerary[2]].rating;
-    //   bestItinerary[3] = allData[3].Lunch[iBestItinerary[3]].name + " - $" + allData[3].Lunch[iBestItinerary[3]].cost + ", Rating: " + allData[3].Lunch[iBestItinerary[3]].rating;
-    //   bestItinerary[4] = allData[4].Event3[iBestItinerary[4]].name + " - $" + allData[4].Event3[iBestItinerary[4]].cost + ", Rating: " + allData[4].Event3[iBestItinerary[4]].rating;
-    //   bestItinerary[5] = allData[5].Dinner[iBestItinerary[5]].name + " - $" + allData[5].Dinner[iBestItinerary[5]].cost + ", Rating: " + allData[5].Dinner[iBestItinerary[5]].rating;
-    //   bestItinerary[6] = allData[6].Event4[iBestItinerary[6]].name + " - $" + allData[6].Event4[iBestItinerary[6]].cost + ", Rating: " + allData[6].Event4[iBestItinerary[6]].rating;
-    // }
-    // else {
-    //   bestItinerary[0] = 'No Itineraries found.';
-    //   bestItinerary[1] = '';
-    //   bestItinerary[2] = '';
-    //   bestItinerary[3] = '';
-    //   bestItinerary[4] = '';
-    //   bestItinerary[5] = '';
-    //   bestItinerary[6] = '';
-    // }
+      // Format data
+      var parsedDataAll = this.preProcessData(allData);
+      if (parsedDataAll == 0) return 0;
 
-    event0 = ['cat', 'dog', 'mouse', 'jackolantern'];
-    event1 = ['mila', 'luna', 'cutiepie', 'baobao'];
-    event2 = ['dood', 'dooer', 'ijsalfidf', 'kittens'];
-    event3 = ['ginger', 'beer', 'muffin', 'captin'];
-    event4 = ['childish', 'gambino', 'donald', 'glover'];
-    event5 = ['ine', 'two', 'three', 'four'];
-    event6 = ['green', 'hoodie', 'i cant', 'realy explain' ];
+      // Initialize constants for GA
+      var maxIter = 100*2; //100;                              // max iterations
+      var itinerarySize = 7;                          // number of things to do in the day
+      var elitek = 5; //1                                // number of elite iteneraries passed onto the next generation
+      var popSize = 60 + elitek;                      // population size for each generation
+      var crossRate = 50;                             // crossover rate (%)
+      var mutateRate = 85;                            // mutation rate (%)
+      var numItemsArray = new Array(itinerarySize);
+      numItemsArray = parsedDataAll.numItemsArrayOut.slice();
+      var tempItinerary = new Array(itinerarySize);
+      var childItinerary = new Array(itinerarySize);
+      var itineraryPopulation = new Array(popSize);   // population array (array of arrays)
+      var newItineraryPop = new Array(popSize);
+      var allItineraryRatings = new Array(popSize);
+      var allItineraryRatingsSum = 0;
+      var bestItinerary = new Array(itinerarySize);
+      var crossedItineraryArray;
+      var iBestItinerary;
+      var bestItineraryObj;
+      var bestRating;
+      var bestCost;
+      var irand;
+      var budgetmax = parseFloat(budgetmax_in); // error check?
+      var budgetmin = parseFloat(budgetmin_in); // error check?
+      console.log("budgetmax: " + budgetmax)
+      console.log("budgetmin: " + budgetmin)
 
-    var Itinerary = [];
+      // Create first population to initialize GA
+      itineraryPopulation = this.initializePopulation(popSize, itinerarySize, numItemsArray);
+      //console.log("Initial Population:")
+      //console.log(itineraryPopulation);
+      console.log("---------------------gen algo start---------------------")
 
-    randomnunber = Math.floor(Math.random() * 5);
+      // Find the "fittest" itinerary and return some itinerary stats
+      bestItineraryObj       = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
+      iBestItinerary         = bestItineraryObj.bestItineraryOut;
+      bestRating             = bestItineraryObj.bestItineraryRatingOut;
+      bestCost               = bestItineraryObj.bestItineraryCostOut;
+      allItineraryRatings    = bestItineraryObj.allItineraryRatingsOut;
+      allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
 
-    Itinerary[0] = event0[randomnunber];
-    Itinerary[1] = event1[randomnunber];
-    Itinerary[2] = event2[randomnunber];
-    Itinerary[3] = event3[randomnunber];
-    Itinerary[4] = event4[randomnunber];
-    Itinerary[5] = event5[randomnunber];
-    Itinerary[6] = event6[randomnunber];
-    
-    return Itinerary;
+      for (var i = 0; i < maxIter; i++) {
+        // Construct new population of itineraries
+        popCnt = 0;
+
+        // Populate with the elite itineraries first
+        for (var j = 0; j < elitek; j++) {
+          newItineraryPop[j] = [iBestItinerary[0],
+          iBestItinerary[1],
+          iBestItinerary[2],
+          iBestItinerary[3],
+          iBestItinerary[4],
+          iBestItinerary[5],
+          iBestItinerary[6]];
+          popCnt = popCnt + 1;
+        }
+
+        // Breed/select other itineraries
+        while (popCnt < popSize) {
+
+          // Pick two itineraries
+          var iItineraryPick1 = 0;
+          var iItineraryPick2 = 0;
+
+          // Use roulette selection or randomized
+          var pick = randomIntFromInterval(1, 2);
+          if (pick == 1) {
+            iItineraryPick1 = rouletteSelect(allItineraryRatings, allItineraryRatingsSum);
+            iItineraryPick2 = rouletteSelect(allItineraryRatings, allItineraryRatingsSum);
+          }
+          else {
+            iItineraryPick1 = randomIntFromInterval(0, popSize - 1);
+            iItineraryPick2 = pickRandomItineraryItemExcluding(popSize, iItineraryPick1);
+          }
+
+          var tempItinerary1 = itineraryPopulation[iItineraryPick1];
+          var tempItinerary2 = itineraryPopulation[iItineraryPick2];
+
+          // Crossover the two itineraries if randomly chosen to do so
+          irand = randomIntFromInterval(1, 100);
+          if (irand < crossRate) {
+            crossedItineraryArray = crossover(tempItinerary1, tempItinerary2);
+            tempItinerary1 = [crossedItineraryArray[0][0], crossedItineraryArray[0][1], crossedItineraryArray[0][2], crossedItineraryArray[0][3],
+            crossedItineraryArray[0][4], crossedItineraryArray[0][5], crossedItineraryArray[0][6]];
+            tempItinerary2 = [crossedItineraryArray[1][0], crossedItineraryArray[1][1], crossedItineraryArray[1][2], crossedItineraryArray[1][3],
+            crossedItineraryArray[1][4], crossedItineraryArray[1][5], crossedItineraryArray[1][6]];
+          }
+
+          // Mutate the two itineraries if randomly chosen to do so
+          irand = randomIntFromInterval(1, 100);
+          if (irand < mutateRate) {
+            tempItinerary1 = mutate(tempItinerary1, numItemsArray);
+          }
+
+          irand = randomIntFromInterval(1, 100);
+          if (irand < mutateRate) {
+            tempItinerary2 = mutate(tempItinerary2, numItemsArray);
+          }
+
+          // Append newly bred itineraries to current population
+          newItineraryPop[popCnt] = [tempItinerary1[0], tempItinerary1[1], tempItinerary1[2], tempItinerary1[3],
+          tempItinerary1[4], tempItinerary1[5], tempItinerary1[6]];
+          newItineraryPop[popCnt + 1] = [tempItinerary2[0], tempItinerary2[1], tempItinerary2[2], tempItinerary2[3],
+          tempItinerary2[4], tempItinerary2[5], tempItinerary2[6]];
+          popCnt = popCnt + 2;
+        } // end while loop
+
+        itineraryPopulation = newItineraryPop.slice(0);
+        bestItineraryObj = findBestItinerary(itineraryPopulation, parsedDataAll, budgetmax, budgetmin);
+        iBestItinerary = bestItineraryObj.bestItineraryOut;
+        bestRating = bestItineraryObj.bestItineraryRatingOut;
+        bestCost = bestItineraryObj.bestItineraryCostOut;
+        allItineraryRatings = bestItineraryObj.allItineraryRatingsOut;
+        allItineraryRatingsSum = bestItineraryObj.allItineraryValSumOut;
+
+        if (i % 50 == 0) {
+        console.log("best rating at " + i + "th iteration: " + bestRating);
+        console.log("best cost at " + i + "th iteration: " + bestCost);
+        console.log("population rating sum: " + i + "th iteration: " + allItineraryRatingsSum);
+      }
+
+    } // end maxIter loop
+    console.log("---------------------gen algo end---------------------")
+    //console.log("End population")
+    //console.log(itineraryPopulation)
+    console.log("best rating: " + bestRating);
+    console.log("best cost: " + bestCost);
+    console.log("population rating sum: " + allItineraryRatingsSum);
+    if (bestRating > 0) {
+      bestItinerary[0] = allData[0].Event1[iBestItinerary[0]].name + " - $" + allData[0].Event1[iBestItinerary[0]].cost + ", Rating: " + allData[0].Event1[iBestItinerary[0]].rating;
+      bestItinerary[1] = allData[1].Breakfast[iBestItinerary[1]].name + " - $" + allData[1].Breakfast[iBestItinerary[1]].cost + ", Rating: " + allData[1].Breakfast[iBestItinerary[1]].rating;
+      bestItinerary[2] = allData[2].Event2[iBestItinerary[2]].name + " - $" + allData[2].Event2[iBestItinerary[2]].cost + ", Rating: " + allData[2].Event2[iBestItinerary[2]].rating;
+      bestItinerary[3] = allData[3].Lunch[iBestItinerary[3]].name + " - $" + allData[3].Lunch[iBestItinerary[3]].cost + ", Rating: " + allData[3].Lunch[iBestItinerary[3]].rating;
+      bestItinerary[4] = allData[4].Event3[iBestItinerary[4]].name + " - $" + allData[4].Event3[iBestItinerary[4]].cost + ", Rating: " + allData[4].Event3[iBestItinerary[4]].rating;
+      bestItinerary[5] = allData[5].Dinner[iBestItinerary[5]].name + " - $" + allData[5].Dinner[iBestItinerary[5]].cost + ", Rating: " + allData[5].Dinner[iBestItinerary[5]].rating;
+      bestItinerary[6] = allData[6].Event4[iBestItinerary[6]].name + " - $" + allData[6].Event4[iBestItinerary[6]].cost + ", Rating: " + allData[6].Event4[iBestItinerary[6]].rating;
+    }
+    else {
+      bestItinerary[0] = 'No Itineraries found.';
+      bestItinerary[1] = '';
+      bestItinerary[2] = '';
+      bestItinerary[3] = '';
+      bestItinerary[4] = '';
+      bestItinerary[5] = '';
+      bestItinerary[6] = '';
+    }
+    if(savedEvents.length > 0) {
+        savedEvents.forEach( function(savedEvent) {
+            bestItinerary[savedEvent.index] = savedEvent.value;
+        })
+    }
+
+    return bestItinerary;
+
   },
 
   preProcessData: function (allData_in) {
