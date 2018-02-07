@@ -171,7 +171,7 @@ function formatAllData(yelpItems, events) {
         if (numYelpItems > 3 && numEvent1 > 0 && numEvent2 > 0 && numEvent3 > 0 && numEvent4 > 0) {
             var items;
             var key;
-            for (var i = 0; i <= 7; i++) {
+            for (var i = 0; i < 7; i++) {
                 if (i == 0) {
                     key = 'Event1';
                     items = events.Event1;
