@@ -120,22 +120,28 @@ module.exports = {
 
                                     // Collect location information
                                     if (events.events[i].venue) {
-                                        if (events.events[i].venue.address &&
+                                        if (events.events[i].venue.location) {
+                                            if (events.events[i].venue.location.lat) {
+                                                // eventLocation = events.events[i].venue.location.lat + "," + events.events[i].venue.location.lon;
+                                                eventLocation = {
+                                                    lat: events.events[i].venue.location.lat,
+                                                    lng: events.events[i].venue.location.lon
+                                                }
+                                                rating = rating + RATING_INCR;
+                                            }
+                                        } else if (events.events[i].venue.address &&
                                         events.events[i].venue.city &&
-                                        events.events[i].venue.state && 
+                                        events.events[i].venue.state &&
                                         events.events[i].venue.postal_code) {
                                             eventLocation = events.events[i].venue.address + "," +
                                             events.events[i].venue.city + "," +
                                             events.events[i].venue.state + "," +
                                             events.events[i].venue.postal_code;
                                             rating = rating + RATING_INCR;
+                                        } else {
+                                            eventLocation = city_in;
                                         }
-                                        else if (events.events[i].venue.location) {
-                                            if (events.events[i].venue.location.lat) {
-                                                eventLocation = events.events[i].venue.location.lat + "," + events.events[i].venue.location.lon;
-                                                rating = rating + RATING_INCR;
-                                            }
-                                        }
+
                                     }
 
                                     rating = MISC.round2NearestHundredth(rating);
@@ -145,7 +151,7 @@ module.exports = {
                                             ", " + events.events[i].url +
                                             ", Date/Time: " + MISC.processDateSG(events.events[i].datetime_local) + "/" + time,
                                         cost: seatgeekFee,
-                                        rating: rating, 
+                                        rating: rating,
                                         url: url,
                                         time: time,
                                         date: date,

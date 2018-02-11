@@ -119,7 +119,10 @@ module.exports = {
                             // Collect location information
                             if (event.venue_id !== null) {
                                 // eventLocation = event.venue_id;
-                                eventLocation = latlon;
+                                eventLocation = {
+                                    lat: latitude,
+                                    lng: longitude
+                                };
                                 rating = rating + RATING_INCR;
                             }
 

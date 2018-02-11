@@ -25,7 +25,7 @@ module.exports = {
                 };
                 var dateEnd = misc.getDate(date_in, 0); // returns a string with a date in the format:
                 // YYYY-MM-DDTHH:MM:SS of the date_in + 1 date at 2:00 am
-                // i.e. if date_in is wed, jan 10, 2018, 9 pm. 
+                // i.e. if date_in is wed, jan 10, 2018, 9 pm.
                 // The returned date is jan 11, 2018, 2 am.
                 var today = misc.getDate(date_in, -1);
                 var meetupFee;
@@ -116,7 +116,7 @@ module.exports = {
                                 else {
                                     name = events.events[i].group.name;
                                 }
-                                
+
                             }
 
                             // Collec the date
@@ -126,22 +126,30 @@ module.exports = {
 
                             // Collect location information
                             if (events.events[i].venue) {
-                                if (events.events[i].venue.address_1 && events.events[i].venue.city && 
+
+                                if (events.events[i].venue.lat) {
+                                    // eventLocation = events.events[i].venue.lat + "," + events.events[i].venue.lon;
+                                    eventLocation = {
+                                        lat: events.events[i].venue.lat,
+                                        lng: events.events[i].venue.lon
+                                    }
+                                } else if (events.events[i].venue.address_1 && events.events[i].venue.city &&
                                 events.events[i].venue.state && events.events[i].venue.zip) {
-                                    eventLocation = events.events[i].venue.address_1 + "," + 
+                                    eventLocation = events.events[i].venue.address_1 + "," +
                                     events.events[i].venue.city + "," +
                                     events.events[i].venue.state + "," +
                                     events.events[i].venue.zip;
                                 }
-                                else if (events.events[i].venue.lat !== null) {
-                                    eventLocation = events.events[i].venue.lat + "," + events.events[i].venue.lon;
-                                }
                                 rating =rating + RATING_INCR;
                             }
                             else if (events.events[i].group) {
-                                if (events.events[i].group.lat !== null) {
-                                    eventLocation = events.events[i].group.lat + "," + events.events[i].group.lon;
-                                    rating =rating + RATING_INCR/2.0;
+                                if (events.events[i].group.lat ) {
+                                    // eventLocation = events.events[i].group.lat + "," + events.events[i].group.lon;
+                                    eventLocation = {
+                                        lat: events.events[i].group.lat,
+                                        lng: events.events[i].group.lon
+                                    }
+                                    rating = rating + RATING_INCR/2.0;
                                 }
                             }
 

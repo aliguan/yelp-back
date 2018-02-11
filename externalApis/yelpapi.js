@@ -45,7 +45,7 @@ module.exports = {
                             default:
                                 business.price = 20;
                         }
-                        
+
                         // Collect url
                         if (business.url) {
                             url = business.url;
@@ -63,8 +63,15 @@ module.exports = {
 
                         // Collect location information
                         businessLocation = location_in;
+
                         if (business.location) {
-                            if (business.location.address1 &&
+                            if (business.coordinates) {
+                                // businessLocation = business.coordinates.latitude + "," + business.coordinates.longitude;
+                                businessLocation = {
+                                    lat: business.coordinates.latitude,
+                                    lng: business.coordinates.longitude
+                                }
+                            } else if (business.location.address1 &&
                                 business.location.city &&
                                 business.location.state &&
                                 business.location.zip_code) {
@@ -72,11 +79,12 @@ module.exports = {
                                     business.location.city + "," +
                                     business.location.state + "," +
                                     business.location.zip_code;
+                            } else {
+                                businessLocation = location_in
                             }
+
                         }
-                        else if (business.coordinates) {
-                            businessLocation = business.coordinates.latitude + "," + business.coordinates.longitude;
-                        }
+
 
                         var item = {
                             name: business.name,
