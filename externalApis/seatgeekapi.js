@@ -3,6 +3,9 @@ var seatgeek = require("../seatgeek/seatgeek");
 const MISC = require('../miscfuncs/misc.js');
 const CLIENT_ID = process.env.SEATGEEK_ID;
 const CLIENT_KEY = process.env.SEATGEEK_KEY;
+const SGRATING_FACT = 1/25; // The bigger this is, the more the price of the event increases the rating
+const SGRATING_BASE = 10.75; // Base rating for a seatgeek event
+const RATING_INCR = 0.5;
 
 module.exports = {
     getSeatGeekData: function (city_in, date_in) {
@@ -43,9 +46,25 @@ module.exports = {
                         if (events && events !== null) {
                             var numOfEvents = events.events.length;
                             var eventCnt = 0;
-                            // console.log(events.events[0])
+                            var cost = 0;
+                            var rating = 0;
+                            var url = '';
+                            var logoUrl = '';
+                            var description = '';
+                            var name = '';
+                            var date = '';
+                            var eventLocation = '';
+
                             for (var i = 0; i < numOfEvents; i++) {
 
+                                // Give the event a rating
+                                rating = SGRATING_BASE; // base rating for a seatgeek event
+                                url = '';
+                                logoUrl = '';
+                                description = '';
+                                name = '';
+                                date = '';
+                                eventLocation = '';
 
                                 // Get the event time
                                 var time = events.events[i].datetime_local;
@@ -70,16 +89,69 @@ module.exports = {
                                 }
 
                                 // !!!only push the event to the array IF there is an accurate fee returned
-                                if (seatgeekFee != -1) {
+                                if (seatgeekFee != -1.0) {
                                     //console.log(events.events[i].stats)
+                                    rating = rating + seatgeekFee*SGRATING_FACT;
 
+                                    if (events.events[i].url && events.events[i].url !== '') {
+                                        rating = rating + RATING_INCR;
+                                        url = events.events[i].url;
+                                    }
+
+                                    if (events.events[i].performers) {
+                                        if (events.events[i].performers.image) {
+                                            logoUrl = events.events[i].performers.image;
+                                        }
+                                    }
+
+                                    if (events.events[i].type && !MISC.isEmpty(events.events[i].type)) {
+                                        description = events.events[i].type;
+                                    }
+
+                                    // Collect the name of the event
+                                    if (events.events[i].title) {
+                                        name = events.events[i].title;
+                                    }
+
+                                    // Collec the date
+                                    if (events.events[i].datetime_local) {
+                                        date = events.events[i].datetime_local;
+                                    }
+
+                                    // Collect location information
+                                    if (events.events[i].venue) {
+                                        if (events.events[i].venue.address &&
+                                        events.events[i].venue.city &&
+                                        events.events[i].venue.state && 
+                                        events.events[i].venue.postal_code) {
+                                            eventLocation = events.events[i].venue.address + "," +
+                                            events.events[i].venue.city + "," +
+                                            events.events[i].venue.state + "," +
+                                            events.events[i].venue.postal_code;
+                                            rating = rating + RATING_INCR;
+                                        }
+                                        else if (events.events[i].venue.location) {
+                                            if (events.events[i].venue.location.lat) {
+                                                eventLocation = events.events[i].venue.location.lat + "," + events.events[i].venue.location.lon;
+                                                rating = rating + RATING_INCR;
+                                            }
+                                        }
+                                    }
+
+                                    rating = MISC.round2NearestHundredth(rating);
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
                                         name: "seatgeek: " + events.events[i].title +
                                             ", " + events.events[i].url +
                                             ", Date/Time: " + MISC.processDateSG(events.events[i].datetime_local) + "/" + time,
                                         cost: seatgeekFee,
-                                        rating: seatgeekFee * 2 + 5, //need to change!!!!
+                                        rating: rating, 
+                                        url: url,
+                                        time: time,
+                                        date: date,
+                                        thumbnail: logoUrl,
+                                        description: description,
+                                        location: eventLocation,
                                     }
 
                                     // Categorize the events by time and push to seatgeekEvents

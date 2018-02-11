@@ -166,7 +166,12 @@ function formatAllData(yelpItems, events) {
         var noneItem = {
             name: "None/Free Itinerary Slot",
             cost: 0,
-            rating: 2.5,
+            rating: 4.4,
+        }
+        var noneItemEvent = {
+            name: "None/Free Itinerary Slot",
+            cost: 0,
+            rating: 11.0,
         }
         if (numYelpItems > 3 && numEvent1 > 0 && numEvent2 > 0 && numEvent3 > 0 && numEvent4 > 0) {
             var items;
@@ -175,15 +180,19 @@ function formatAllData(yelpItems, events) {
                 if (i == 0) {
                     key = 'Event1';
                     items = events.Event1;
+                    items.push(noneItemEvent);
                 } else if (i == 2) {
                     key = 'Event2';
                     items = events.Event2;
+                    items.push(noneItemEvent);
                 } else if (i == 4) {
                     key = 'Event3';
                     items = events.Event3;
+                    items.push(noneItemEvent);
                 } else if (i == 6) {
                     key = 'Event4';
                     items = events.Event4;
+                    items.push(noneItemEvent);
                 } else if (i == 1) {
                     key = 'Breakfast';
                     var tempYelpItems = yelpItems.slice(0, itemIntervalYelp);

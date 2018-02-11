@@ -1,7 +1,7 @@
 module.exports = {
 
     // Get data from Yelp and format it
-    getYelpData: function(total_in, term_in, location_in, client) {
+    getYelpData: function (total_in, term_in, location_in, client) {
         return new Promise(function (resolve, reject) {
 
             var total = total_in;
@@ -21,6 +21,13 @@ module.exports = {
                     limit: 50,
                     offset: i,
                 }).then(response => {
+                    var url = '';
+                    var logoUrl = '';
+                    var description = '';
+                    var name = '';
+                    var time = '';
+                    var date = '';
+                    var businessLocation ='';
                     response.jsonBody.businesses.forEach(business => {
                         switch (business.price) {
                             case '$':
@@ -38,16 +45,55 @@ module.exports = {
                             default:
                                 business.price = 20;
                         }
+                        
+                        // Collect url
+                        if (business.url) {
+                            url = business.url;
+                        }
+
+                        // Collect image
+                        if (business.image_url) {
+                            logoUrl = business.image_url;
+                        }
+
+                        // Collect description
+                        if (business.phone) {
+                            description = business.phone;
+                        }
+
+                        // Collect location information
+                        businessLocation = location_in;
+                        if (business.location) {
+                            if (business.location.address1 &&
+                                business.location.city &&
+                                business.location.state &&
+                                business.location.zip_code) {
+                                businessLocation = business.location.address1 + "," +
+                                    business.location.city + "," +
+                                    business.location.state + "," +
+                                    business.location.zip_code;
+                            }
+                        }
+                        else if (business.coordinates) {
+                            businessLocation = business.coordinates.latitude + "," + business.coordinates.longitude;
+                        }
+
                         var item = {
                             name: business.name,
                             cost: business.price,
-                            rating: business.rating
+                            rating: business.rating,
+                            url: url,
+                            time: time,
+                            date: date,
+                            thumbnail: logoUrl,
+                            description: description,
+                            location: businessLocation,
                         }
                         businesses.push(item);
                     });
                     count++;
 
-                    if (count == Math.floor(total/50) ) {
+                    if (count == Math.floor(total / 50)) {
                         resolve(businesses);
                     }
                     else if (numOfBiz == 0) {
