@@ -167,13 +167,15 @@ function formatAllData(yelpItems, events) {
             name: "None/Free Itinerary Slot",
             cost: 0,
             rating: 4.4,
+            location: {},
         }
         var noneItemEvent = {
             name: "None/Free Itinerary Slot",
             cost: 0,
             rating: 11.0,
+            location: {},
         }
-        if (numYelpItems > 3 && numEvent1 > 0 && numEvent2 > 0 && numEvent3 > 0 && numEvent4 > 0) {
+        if (numYelpItems > 3 && numEvent1 >= 0 && numEvent2 >= 0 && numEvent3 >= 0 && numEvent4 >= 0) {
             var items;
             var key;
             for (var i = 0; i < 7; i++) {

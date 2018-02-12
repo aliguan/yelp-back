@@ -8,7 +8,6 @@ module.exports = {
             if (total > 250) {
                 total = 250;
             }
-            var count = 0;
             var businesses = [];
             var itineraries = [];
             var numOfBiz = Math.floor(total / 50);
@@ -29,6 +28,10 @@ module.exports = {
                     var date = '';
                     var businessLocation ='';
                     response.jsonBody.businesses.forEach(business => {
+                        if (count==0) {
+                            console.log(business)
+                            count=1;
+                        }
                         switch (business.price) {
                             case '$':
                                 business.price = 10;
