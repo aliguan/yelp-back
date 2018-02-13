@@ -160,26 +160,28 @@ module.exports = {
                                         location: eventLocation,
                                     }
 
-                                    // Categorize the events by time and push to seatgeekEvents
-                                    if (time <= 200) {
-                                        seatgeekEvents.Event4.push(item);
-                                        eventCnt++;
-                                    }
-                                    else if (time <= 900) {
-                                        seatgeekEvents.Event1.push(item);
-                                        eventCnt++;
-                                    }
-                                    else if (time <= 1200) {
-                                        seatgeekEvents.Event2.push(item);
-                                        eventCnt++;
-                                    }
-                                    else if (time <= 1800) {
-                                        seatgeekEvents.Event3.push(item);
-                                        eventCnt++;
-                                    }
-                                    else if (time < 2400) {
-                                        seatgeekEvents.Event4.push(item);
-                                        eventCnt++;
+                                    if (events.events[i].datetime_local) {
+                                        // Categorize the events by time and push to seatgeekEvents
+                                        if (time <= 200) {
+                                            seatgeekEvents.Event4.push(item);
+                                            eventCnt++;
+                                        }
+                                        else if (time <= 900) {
+                                            seatgeekEvents.Event1.push(item);
+                                            eventCnt++;
+                                        }
+                                        else if (time <= 1200) {
+                                            seatgeekEvents.Event2.push(item);
+                                            eventCnt++;
+                                        }
+                                        else if (time <= 1800) {
+                                            seatgeekEvents.Event3.push(item);
+                                            eventCnt++;
+                                        }
+                                        else if (time < 2400) {
+                                            seatgeekEvents.Event4.push(item);
+                                            eventCnt++;
+                                        }
                                     }
                                 }
                             }

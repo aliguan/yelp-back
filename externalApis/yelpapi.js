@@ -28,10 +28,10 @@ module.exports = {
                     var date = '';
                     var businessLocation ='';
                     response.jsonBody.businesses.forEach(business => {
-                        if (count==0) {
-                            console.log(business)
-                            count=1;
-                        }
+                        // if (count==0) {
+                        //     console.log(business)
+                        //     count=1;
+                        // }
                         switch (business.price) {
                             case '$':
                                 business.price = 10;

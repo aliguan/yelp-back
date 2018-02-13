@@ -3,7 +3,7 @@ const misc = require('../miscfuncs/misc.js');
 const meetup = require('../node_modules/meetup-api/lib/meetup')({
     key: process.env.MEETUP_KEY
 });
-const MURATING_FACT = 1/100; // The bigger this is, the more the price of the event increases the rating
+const MURATING_FACT = 1/300; // The bigger this is, the more the price of the event increases the rating
 const MURATING_BASE = 10.5; // Base rating for a meetup event
 const RATING_INCR = 0.5;
 
@@ -54,13 +54,8 @@ module.exports = {
                         var name = '';
                         var date = '';
                         var eventLocation = '';
-                        // cnt =1;
 
                         for (var i = 0; i < numOfEvents; i++) {
-                            // if (cnt==1) {
-                            //     console.log(events.events[i])
-                            //     cnt=0;
-                            // }
 
                             // Get the event time
                             var time = events.events[i].time;
@@ -167,26 +162,28 @@ module.exports = {
                                 location: eventLocation, // either lat lon or address of venue, or lat lon or group
                             }
 
-                            // Categorize the events by time
-                            if (time <= 200) {
-                                meetupEvents.Event4.push(item);
-                                eventCnt++;
-                            }
-                            else if (time <= 900) {
-                                meetupEvents.Event1.push(item);
-                                eventCnt++;
-                            }
-                            else if (time <= 1200) {
-                                meetupEvents.Event2.push(item);
-                                eventCnt++;
-                            }
-                            else if (time <= 1800) {
-                                meetupEvents.Event3.push(item);
-                                eventCnt++;
-                            }
-                            else if (time < 2400) {
-                                meetupEvents.Event4.push(item);
-                                eventCnt++;
+                            if (events.events[i].time) {
+                                // Categorize the events by time
+                                if (time <= 200) {
+                                    meetupEvents.Event4.push(item);
+                                    eventCnt++;
+                                }
+                                else if (time <= 900) {
+                                    meetupEvents.Event1.push(item);
+                                    eventCnt++;
+                                }
+                                else if (time <= 1200) {
+                                    meetupEvents.Event2.push(item);
+                                    eventCnt++;
+                                }
+                                else if (time <= 1800) {
+                                    meetupEvents.Event3.push(item);
+                                    eventCnt++;
+                                }
+                                else if (time < 2400) {
+                                    meetupEvents.Event4.push(item);
+                                    eventCnt++;
+                                }
                             }
 
                         }

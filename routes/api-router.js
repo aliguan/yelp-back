@@ -167,12 +167,14 @@ function formatAllData(yelpItems, events) {
             name: "None/Free Itinerary Slot",
             cost: 0,
             rating: 4.4,
+            time: "9999",
             location: {},
         }
         var noneItemEvent = {
             name: "None/Free Itinerary Slot",
             cost: 0,
-            rating: 11.0,
+            rating: 10.5,
+            time: "9999",
             location: {},
         }
         if (numYelpItems > 3 && numEvent1 >= 0 && numEvent2 >= 0 && numEvent3 >= 0 && numEvent4 >= 0) {

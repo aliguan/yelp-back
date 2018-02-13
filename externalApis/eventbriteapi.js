@@ -83,19 +83,19 @@ module.exports = {
                             name = '';
                             date = '';
                             eventLocation='';
-                            if (event.url !== null && event.url !== '') {
+                            if (event.url && event.url !== '') {
                                 rating = rating + RATING_INCR;
                                 url = event.url;
                             }
 
-                            if (event.logo !== null) {
-                                if (event.logo.url !== null && event.logo.url !== '') {
+                            if (event.logo) {
+                                if (event.logo.url && event.logo.url !== '') {
                                     logoUrl = event.logo.url;
                                 }
                             }
 
-                            if (event.description !== null) {
-                                if (event.description.text !== null && event.description.text !== '') {
+                            if (event.description) {
+                                if (event.description.text && event.description.text !== '') {
                                     if (event.description.text.length <= 1000 && event.description.text.length > 0) {
                                         description = event.description.text;
                                     }
@@ -103,21 +103,21 @@ module.exports = {
                             }
 
                             // Collect the name of the event
-                            if (event.name !== null) {
-                                if (event.name.text !== null) {
+                            if (event.name) {
+                                if (event.name.text) {
                                     name = event.name.text;
                                 }
                             }
 
                             // Collec the date
-                            if (event.start !== null) {
-                                if (event.start.local !== null) {
+                            if (event.start) {
+                                if (event.start.local) {
                                     date = date_in;
                                 }
                             }
 
                             // Collect location information
-                            if (event.venue_id !== null) {
+                            if (event.venue_id) {
                                 // eventLocation = event.venue_id;
                                 eventLocation = {
                                     lat: latitude,
@@ -140,8 +140,8 @@ module.exports = {
                                 location: eventLocation,
                             };
 
-                            if (event.start !== null) {
-                                if (event.start.local !== null) {
+                            if (event.start) {
+                                if (event.start.local) {
                                     // Categorize the events by time and push to seatgeekEvents
                                     if (time <= 200) {
                                         eventbriteEvents.Event4.push(item);
