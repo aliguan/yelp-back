@@ -22,14 +22,14 @@ apiRouter.post('/', (req, res, next) => {
     var yelpEventsGlobal;
     var eventbriteGlobal
     var date = new Date(req.body.date);
-
+    var string_date = req.body.string_date
     // Promise Chain of API calls
 
     // 1. fulfilled promise returned from getYelpDataLength is the total businesses returned from the query
     getYelpDataLength(req.body.term, req.body.latlon).then(
         function (yelpTotal) {
             // 2. fulfilled promise returned from getYelpData is an array of object arrays
-            return yelpApi.getYelpData(yelpTotal, req.body.term, req.body.latlon, client);
+            return yelpApi.getYelpData(yelpTotal, req.body.term, req.body.latlon, client, date, string_date);
         }, function (err) {
             return err;
         })

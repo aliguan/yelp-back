@@ -1,8 +1,13 @@
+const MISC = require('../miscfuncs/misc.js');
+
 module.exports = {
 
     // Get data from Yelp and format it
-    getYelpData: function (total_in, term_in, location_in, client) {
+    getYelpData: function (total_in, term_in, location_in, client, date, string_date) {
         return new Promise(function (resolve, reject) {
+
+            var substring = string_date.substring(4,16);
+            var unix = new Date(substring).getTime()/1000;
 
             var total = total_in;
             if (total > 250) {
@@ -17,6 +22,7 @@ module.exports = {
                 client.search({
                     term: term_in,
                     location: location_in,
+                    open_at: unix,
                     limit: 50,
                     offset: i,
                 }).then(response => {
