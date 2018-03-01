@@ -3,28 +3,24 @@ const MISC = require('../miscfuncs/misc.js');
 module.exports = {
 
     // Get data from Yelp and format it
-    getYelpData: function (total_in, term_in, location_in, client, date, string_date) {
+    getYelpData: function (term_in, location_in, client, date, string_date, hours_offset) {
         return new Promise(function (resolve, reject) {
+            const HOURS_TO_SECONDS = 3600;
 
-            var substring = string_date.substring(4,16);
-            var unix = new Date(substring).getTime()/1000;
-
-            var total = total_in;
-            if (total > 250) {
-                total = 250;
-            }
+            var date_substring = string_date.substring(4,16);
+            var unix_time = new Date(date_substring).getTime()/1000 + hours_offset*HOURS_TO_SECONDS;
+            unix_time = parseInt(unix_time);
+            // console.log("term_in: " + term_in)
+            // console.log("location_in: " + location_in)
+            // console.log("date_substring: " + date_substring)
             var businesses = [];
-            var itineraries = [];
-            var numOfBiz = Math.floor(total / 50);
-            var count = 0;
 
-            for (var i = 0; i < total; i += 50) {
                 client.search({
                     term: term_in,
-                    location: location_in,
-                    open_at: unix,
+                    //open_at: unix_time,
+                    location: location_in,                    
                     limit: 50,
-                    offset: i,
+                    offset: 0,
                 }).then(response => {
                     var url = '';
                     var logoUrl = '';
@@ -33,11 +29,9 @@ module.exports = {
                     var time = '';
                     var date = '';
                     var businessLocation ='';
+                    //console.log(response)
                     response.jsonBody.businesses.forEach(business => {
-                        // if (count==0) {
-                        //     console.log(business)
-                        //     count=1;
-                        // }
+
                         switch (business.price) {
                             case '$':
                                 business.price = 10;
@@ -108,20 +102,13 @@ module.exports = {
                         }
                         businesses.push(item);
                     });
-                    count++;
 
-                    if (count == Math.floor(total / 50)) {
-                        resolve(businesses);
-                    }
-                    else if (numOfBiz == 0) {
-                        resolve(businesses);
-                    }
+                    resolve(businesses);
 
                 }).catch(e => {
                     console.log(e);
                     reject(-1);
                 });
-            }
         });
     }
 }
