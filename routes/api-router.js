@@ -260,6 +260,7 @@ apiRouter.post('/', (req, res, next) => {
                 yelpDinnerItemsGlobal,
                 events);
 
+                console.log(events.Event3.name)
             if (!misc.isEmpty(itineraries) && itineraries != -1) {
                 res.send(itineraries);
             }
