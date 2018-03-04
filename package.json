@@ -16,6 +16,7 @@
     "express": "~4.14.1",
     "express-ejs-layouts": "~2.2.0",
     "geocoder": "^0.2.3",
+    "googleplaces": "^0.6.1",
     "localStorage": "^1.0.3",
     "meetup-api": "^1.4.30",
     "mongoose": "^4.13.4",

@@ -7,6 +7,7 @@ const meetupApi = require('../externalApis/meetupapi.js');
 const seatgeekApi = require('../externalApis/seatgeekapi.js');
 const eventbriteApi = require('../externalApis/eventbriteapi.js');
 const yelpEventApi = require('../externalApis/yelpeventsapi.js');
+const googlePlacesApi = require('../externalApis/googleplacesapi.js');
 const misc = require('../miscfuncs/misc.js');
 
 const clientId = process.env.CLIENT_ID;
@@ -25,6 +26,7 @@ apiRouter.post('/', (req, res, next) => {
     var doMeetupCalls = true;
     var doEventbriteCalls = true;
     var doSeatgeekCalls = true;
+    var doGooglePlacesCalls = true;
 
     // Variables for returned data
     var yelpBreakfastItemsGlobal;
@@ -34,6 +36,7 @@ apiRouter.post('/', (req, res, next) => {
     var seatgeekItemsGlobal;
     var yelpEventsGlobal;
     var eventbriteGlobal
+    var googlePlacesGlobal;
     var date = new Date(req.body.date);
     var string_date = req.body.string_date
 
@@ -184,8 +187,33 @@ apiRouter.post('/', (req, res, next) => {
             console.log(e)
         })  // -------------------------- End eventbrite event search
         .then(function (eventbriteEvents) {
-
             eventbriteGlobal = eventbriteEvents;
+
+            if (doGooglePlacesCalls) {
+                return googlePlacesApi.getGooglePlacesData(req.body.latlon);
+            }
+            else {
+                var googlePlacesEvents = {
+                    Event1: [],
+                    Event2: [],
+                    Event3: [],
+                    Event4: [],
+                }; 
+                googlePlacesEvents.Event1.push({})
+                googlePlacesEvents.Event2.push({})
+                googlePlacesEvents.Event3.push({})
+                googlePlacesEvents.Event4.push({})
+                return googlePlacesEvents;
+            }
+
+        }, function (err) {
+            return err;
+        }).catch(function (e) {
+            console.log(e)
+        })  // -------------------------- End eventbrite event search
+        .then(function (googlePlaces) {
+
+            googlePlacesGlobal = googlePlaces;
 
             // Consolidate all events and yelp restaurants/businesses
             var events = {
@@ -193,6 +221,7 @@ apiRouter.post('/', (req, res, next) => {
                 yelpEventsGlobal,
                 eventbriteGlobal,
                 seatgeekItemsGlobal,
+                googlePlacesGlobal,
                 yelpBreakfastItemsGlobal,
                 yelpLunchItemsGlobal,
                 yelpDinnerItemsGlobal,
@@ -205,14 +234,6 @@ apiRouter.post('/', (req, res, next) => {
             else {
                 res.send([])
             }
-                
-                
-            // if (!misc.isEmpty(itineraries) && itineraries != -1) {
-            //     res.send(itineraries);
-            // }
-            // else {
-            //     res.send([])
-            // }
 
         }, function (err) {
             return err;
