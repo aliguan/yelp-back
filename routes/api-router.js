@@ -13,26 +13,12 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 let client = yelp.client(process.env.API_KEY);
 
-const noneItem = {
-    name: "None/Free Itinerary Slot",
-    cost: 0,
-    rating: 4.4,
-    time: "9999",
-    location: {},
-}
-const noneItemEvent = {
-    name: "None/Free Itinerary Slot",
-    cost: 0,
-    rating: 10.5,
-    time: "9999",
-    location: {},
-}
+
 
 //Search for business
 apiRouter.post('/', (req, res, next) => {
 
     // API calls toggles (if true, do the API call)
-    var doYelpBreakfastCalls = true;
     var doYelpLunchCalls = true;
     var doYelpDinnerCalls = true;
     var doYelpEventCalls = false;
@@ -201,72 +187,32 @@ apiRouter.post('/', (req, res, next) => {
 
             eventbriteGlobal = eventbriteEvents;
 
-            console.log("---------------------Seatgeek API returned data check---------------------")
-            console.log(seatgeekItemsGlobal.Event1[0]);
-            console.log(seatgeekItemsGlobal.Event2[0]);
-            console.log(seatgeekItemsGlobal.Event3[0]);
-            console.log(seatgeekItemsGlobal.Event4[0]);
-            console.log("---------------------meetup API returned data check---------------------")
-            console.log(meetupItemsGlobal.Event1[0]);
-            console.log(meetupItemsGlobal.Event2[0]);
-            console.log(meetupItemsGlobal.Event3[0]);
-            console.log(meetupItemsGlobal.Event4[0]);
-            console.log("---------------------yelp API returned data check---------------------")
-            console.log(yelpBreakfastItemsGlobal[0]);
-            console.log(yelpLunchItemsGlobal[0]);
-            console.log(yelpDinnerItemsGlobal[0]);
-            console.log("---------------------eventbrite API returned data check---------------------")
-            console.log(eventbriteGlobal.Event1[0]);
-            console.log(eventbriteGlobal.Event2[0]);
-            console.log(eventbriteGlobal.Event3[0]);
-            console.log(eventbriteGlobal.Event4[0]);
-
-            // Consolidate all events by concatenation
+            // Consolidate all events and yelp restaurants/businesses
             var events = {
-                Event1: [],
-                Event2: [],
-                Event3: [],
-                Event4: []
-            };
-
-            if (doMeetupCalls) {
-                events.Event1 = events.Event1.concat(meetupItemsGlobal.Event1);
-                events.Event2 = events.Event2.concat(meetupItemsGlobal.Event2);
-                events.Event3 = events.Event3.concat(meetupItemsGlobal.Event3);
-                events.Event4 = events.Event4.concat(meetupItemsGlobal.Event4);
-            }
-            if (doYelpEventCalls) {
-                events.Event1 = events.Event1.concat(yelpEventsGlobal.Event1);
-                events.Event2 = events.Event2.concat(yelpEventsGlobal.Event2);
-                events.Event3 = events.Event3.concat(yelpEventsGlobal.Event3);
-                events.Event4 = events.Event4.concat(yelpEventsGlobal.Event4);
-            }
-            if (doEventbriteCalls) {
-                events.Event1 = events.Event1.concat(eventbriteGlobal.Event1);
-                events.Event2 = events.Event2.concat(eventbriteGlobal.Event2);
-                events.Event3 = events.Event3.concat(eventbriteGlobal.Event3);
-                events.Event4 = events.Event4.concat(eventbriteGlobal.Event4);
-            }
-            if (doSeatgeekCalls) {
-                events.Event1 = events.Event1.concat(seatgeekItemsGlobal.Event1);
-                events.Event2 = events.Event2.concat(seatgeekItemsGlobal.Event2);
-                events.Event3 = events.Event3.concat(seatgeekItemsGlobal.Event3);
-                events.Event4 = events.Event4.concat(seatgeekItemsGlobal.Event4);
-            }
-
-
-            var itineraries = formatAllData(yelpBreakfastItemsGlobal,
+                meetupItemsGlobal,
+                yelpEventsGlobal,
+                eventbriteGlobal,
+                seatgeekItemsGlobal,
+                yelpBreakfastItemsGlobal,
                 yelpLunchItemsGlobal,
                 yelpDinnerItemsGlobal,
-                events);
+            };
 
-                console.log(events.Event3.name)
-            if (!misc.isEmpty(itineraries) && itineraries != -1) {
-                res.send(itineraries);
+
+            if (!misc.isEmpty(events)) {
+                res.send(events);
             }
             else {
                 res.send([])
             }
+                
+                
+            // if (!misc.isEmpty(itineraries) && itineraries != -1) {
+            //     res.send(itineraries);
+            // }
+            // else {
+            //     res.send([])
+            // }
 
         }, function (err) {
             return err;
@@ -295,89 +241,5 @@ function getYelpDataLength(term_in, latlon_in) {
         });
     });
 }
-
-
-// Format all data
-function formatAllData(yelpBreakfastItems, yelpLunchItems, yelpDinnerItems, events) {
-    try {
-        var numYelpBreakfastItems = yelpBreakfastItems.length;
-        var numYelpLunchItems = yelpLunchItems.length;
-        var numYelpDinnerItems = yelpDinnerItems.length;
-        var numEvent1 = events.Event1.length;
-        var numEvent2 = events.Event2.length;
-        var numEvent3 = events.Event3.length;
-        var numEvent4 = events.Event4.length;
-        console.log("---------------------formatAllData Function---------------------")
-        console.log("numYelpBreakfastItems: " + numYelpBreakfastItems)
-        console.log("numYelpLunchItems: " + numYelpLunchItems)
-        console.log("numYelpDinnerItems: " + numYelpDinnerItems)
-        console.log("events1: " + numEvent1)
-        console.log("events2: " + numEvent2)
-        console.log("events3: " + numEvent3)
-        console.log("events4: " + numEvent4)
-        var itineraries = [];
-
-        if (numYelpBreakfastItems >= 0 &&
-            numYelpLunchItems >= 0 &&
-            numYelpDinnerItems >= 0 &&
-            numEvent1 >= 0 &&
-            numEvent2 >= 0 &&
-            numEvent3 >= 0 &&
-            numEvent4 >= 0) {
-            var items;
-            var key;
-            for (var i = 0; i < 7; i++) {
-                if (i == 0) {
-                    key = 'Event1';
-                    items = events.Event1;
-                    items.push(noneItemEvent);
-                } else if (i == 2) {
-                    key = 'Event2';
-                    items = events.Event2;
-                    items.push(noneItemEvent);
-                } else if (i == 4) {
-                    key = 'Event3';
-                    items = events.Event3;
-                    items.push(noneItemEvent);
-                } else if (i == 6) {
-                    key = 'Event4';
-                    items = events.Event4;
-                    items.push(noneItemEvent);
-                } else if (i == 1) {
-                    key = 'Breakfast';
-                    var tempYelpItems = yelpBreakfastItems;
-                    // Add a none itinerary item at the end
-                    tempYelpItems.push(noneItem);
-                    items = tempYelpItems;
-                } else if (i == 3) {
-                    key = 'Lunch';
-                    var tempYelpItems = yelpLunchItems;
-                    // Add a none itinerary item at the end
-                    tempYelpItems.push(noneItem);
-                    items = tempYelpItems;
-                } else {
-                    key = 'Dinner';
-                    var tempYelpItems = yelpDinnerItems;
-                    // Add a none itinerary item at the end
-                    tempYelpItems.push(noneItem);
-                    items = tempYelpItems;
-                }
-                var itemObj = {};
-                itemObj[key] = items;
-                itineraries.push(itemObj);
-            }
-            return itineraries;
-        } else {
-            console.log("Not enough items")
-            return -1;
-        }
-    }
-    catch (e) {
-        console.log('error in formatAllData')
-        console.log(e)
-    }
-}
-
-
 
 module.exports = apiRouter;
