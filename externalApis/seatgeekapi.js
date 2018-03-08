@@ -3,8 +3,8 @@ var seatgeek = require("../seatgeek/seatgeek");
 const MISC = require('../miscfuncs/misc.js');
 const CLIENT_ID = process.env.SEATGEEK_ID;
 const CLIENT_KEY = process.env.SEATGEEK_KEY;
-const SGRATING_FACT = 1/25; // The bigger this is, the more the price of the event increases the rating
-const SGRATING_BASE = 10.75; // Base rating for a seatgeek event
+const SGRATING_FACT = 1/100; // The bigger this is, the more the price of the event increases the rating
+const SGRATING_BASE = 10.5; // Base rating for a seatgeek event
 const RATING_INCR = 0.5;
 
 module.exports = {
@@ -147,9 +147,8 @@ module.exports = {
                                     rating = MISC.round2NearestHundredth(rating);
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
-                                        name: "seatgeek: " + events.events[i].title +
-                                            ", " + events.events[i].url +
-                                            ", Date/Time: " + MISC.processDateSG(events.events[i].datetime_local) + "/" + time,
+                                        name: "sg: " + time +"/" + date + ", " + events.events[i].title +
+                                            ", " + events.events[i].url,
                                         cost: seatgeekFee,
                                         rating: rating,
                                         url: url,

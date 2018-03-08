@@ -78,7 +78,7 @@ module.exports = {
                             }
 
                             var item = {
-                                name: "googleplaces: " + name + ", time: " + time,
+                                name: "gp: " + time + "/" + date+", " + name + ", " + url,
                                 cost: cost,
                                 rating: GPRATING_BASE,
                                 url: url,

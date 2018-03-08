@@ -3,7 +3,7 @@ const misc = require('../miscfuncs/misc.js');
 const meetup = require('../node_modules/meetup-api/lib/meetup')({
     key: process.env.MEETUP_KEY
 });
-const MURATING_FACT = 1/300; // The bigger this is, the more the price of the event increases the rating
+const MURATING_FACT = 1/100; // The bigger this is, the more the price of the event increases the rating
 const MURATING_BASE = 10.5; // Base rating for a meetup event
 const RATING_INCR = 0.5;
 
@@ -150,8 +150,7 @@ module.exports = {
 
                             rating = misc.round2NearestHundredth(rating);
                             var item = {
-                                name: "meetup: " + name +
-                                    ", Date/Time: " + date + "/" + time,
+                                name: "mu: " + time + "/" + date+ ", "+ name + ", " + url,
                                 cost: meetupFee,
                                 rating: rating,
                                 url: url,
