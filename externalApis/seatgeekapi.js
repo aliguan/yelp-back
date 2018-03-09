@@ -3,7 +3,7 @@ var seatgeek = require("../seatgeek/seatgeek");
 const MISC = require('../miscfuncs/misc.js');
 const CLIENT_ID = process.env.SEATGEEK_ID;
 const CLIENT_KEY = process.env.SEATGEEK_KEY;
-const SGRATING_FACT = 1/100; // The bigger this is, the more the price of the event increases the rating
+const SGRATING_FACT = 1 *0/ 100; // The bigger this is, the more the price of the event increases the rating
 const SGRATING_BASE = 10.5; // Base rating for a seatgeek event
 const RATING_INCR = 0.5;
 
@@ -27,12 +27,12 @@ module.exports = {
                 // i.e. if date_in is wed, jan 10, 2018, 9 pm.
                 // The returned date is jan 11, 2018, 2 am.
                 var today = MISC.getDate(date_in, -1);
-                console.log("sg location: " + city_in)
+                // console.log("sg location: " + city_in)
 
                 //Do the seatgeek API call using seatgeek.js
                 seatgeek.events({
-                    'datetime_utc.gte': today,    //gte = greater than or equal to
-                    'datetime_utc.lte': dateEnd,  //lte = less than or equal to
+                    'datetime_local.gte': today,    //gte = greater than or equal to
+                    'datetime_local.lte': dateEnd,  //lte = less than or equal to
                     'venue.city': city_in,
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_KEY
@@ -79,19 +79,20 @@ module.exports = {
                                 // Get the event fee/cost
                                 seatgeekFee = -1.0;
                                 if (!MISC.isEmpty(events.events[i].stats)) {
-                                    if (events.events[i].stats.lowest_price) {
+                                    if (events.events[i].stats.average_price) {
                                         // Average price. do we want max price? or give user a choice?
-                                        seatgeekFee = events.events[i].stats.lowest_price;
-                                    }
-                                    else if (events.events[i].stats.average_price) {
                                         seatgeekFee = events.events[i].stats.average_price;
                                     }
+                                    else if (events.events[i].stats.lowest_price) {
+                                        seatgeekFee = events.events[i].stats.lowest_price;
+                                    }
+                                    seatgeekFee = MISC.round2NearestHundredth(seatgeekFee);
                                 }
 
                                 // !!!only push the event to the array IF there is an accurate fee returned
                                 if (seatgeekFee != -1.0) {
                                     //console.log(events.events[i].stats)
-                                    rating = rating + seatgeekFee*SGRATING_FACT;
+                                    rating = rating + seatgeekFee * SGRATING_FACT;
 
                                     if (events.events[i].url && events.events[i].url !== '') {
                                         rating = rating + RATING_INCR;
@@ -118,6 +119,8 @@ module.exports = {
                                         date = events.events[i].datetime_local;
                                     }
 
+                                    // console.log("raw date sg:" + date)
+
                                     // Collect location information
                                     if (events.events[i].venue) {
                                         if (events.events[i].venue.location) {
@@ -130,13 +133,13 @@ module.exports = {
                                                 rating = rating + RATING_INCR;
                                             }
                                         } else if (events.events[i].venue.address &&
-                                        events.events[i].venue.city &&
-                                        events.events[i].venue.state &&
-                                        events.events[i].venue.postal_code) {
+                                            events.events[i].venue.city &&
+                                            events.events[i].venue.state &&
+                                            events.events[i].venue.postal_code) {
                                             eventLocation = events.events[i].venue.address + "," +
-                                            events.events[i].venue.city + "," +
-                                            events.events[i].venue.state + "," +
-                                            events.events[i].venue.postal_code;
+                                                events.events[i].venue.city + "," +
+                                                events.events[i].venue.state + "," +
+                                                events.events[i].venue.postal_code;
                                             rating = rating + RATING_INCR;
                                         } else {
                                             eventLocation = city_in;
@@ -147,7 +150,7 @@ module.exports = {
                                     rating = MISC.round2NearestHundredth(rating);
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
-                                        name: "sg: " + time +"/" + date + ", " + events.events[i].title +
+                                        name: "sg: " + time + "/" + date + ", " + events.events[i].title +
                                             ", " + events.events[i].url,
                                         cost: seatgeekFee,
                                         rating: rating,
