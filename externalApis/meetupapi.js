@@ -58,13 +58,21 @@ module.exports = {
                         for (var i = 0; i < numOfEvents; i++) {
 
                             // Get the event time
-                            var time = events.events[i].time;
+                            var time = events.events[i].local_time;
                             if (time) {
-                                var dateObj = new Date(time);
-                                time = misc.processTime(dateObj.toString());
+                                time = misc.processTimeMU(time,0,5);
                             }
                             else {
-                                time = '9999';
+                                time = events.events[i].time+events.events[i].utc_offset;
+                                //console.log(events.events[i])
+                                if (time) {
+                                    var dateObj = new Date(time);
+                                    console.log(dateObj)
+                                    time = misc.processTimeMU(dateObj.toUTCString(),17,22); //Sat, 12 May 2018 18:00:00 GMT
+                                }
+                                else {
+                                    time = '9999';
+                                }
                             }
                             var timeFloat = parseFloat(time);
 
@@ -161,7 +169,7 @@ module.exports = {
                                 location: eventLocation, // either lat lon or address of venue, or lat lon or group
                             }
 
-                            if (events.events[i].time) {
+                            if (events.events[i].local_time || events.events[i].time) {
                                 // Categorize the events by time
                                 if (time <= 200) {
                                     meetupEvents.Event4.push(item);

@@ -56,6 +56,12 @@ module.exports = {
         return time = time.replace(":","");
     },
 
+    // Get the military time out from the local_time field
+    processTimeMU: function (time,istrt,istop) {
+        time = time.substring(istrt,istop); 
+        return time = time.replace(":","");
+    },
+
     // Get the date from the following input
     // input format is like: 2018-01-06T10:00:00
     processDateSG: function (time) {
