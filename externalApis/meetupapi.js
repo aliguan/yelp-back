@@ -6,7 +6,6 @@ const meetup = require('../node_modules/meetup-api/lib/meetup')({
 const MURATING_FACT = 1*0/100; // The bigger this is, the more the price of the event increases the rating
 const MURATING_BASE = 10.5; // Base rating for a meetup event
 const RATING_INCR = 0.0;
-const LATENIGHT_TIME = 400; //event 4 time slot (4 a.m.)
 const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
@@ -175,11 +174,7 @@ module.exports = {
 
                             if (events.events[i].local_time || events.events[i].time) {
                                 // Categorize the events by time
-                                if (time <= LATENIGHT_TIME) {
-                                    meetupEvents.Event4.push(item);
-                                    eventCnt++;
-                                }
-                                else if (time <= EVENT1_TIME) {
+                                if (time <= EVENT1_TIME) {
                                     meetupEvents.Event1.push(item);
                                     eventCnt++;
                                 }

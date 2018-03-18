@@ -1,5 +1,4 @@
 const MISC = require('../miscfuncs/misc.js');
-const LATENIGHT_TIME = 400; //event 4 time slot (4 a.m.)
 const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
@@ -65,11 +64,7 @@ module.exports = {
                     }
 
                     // Categorize the events by time
-                    if (time <= LATENIGHT_TIME) {
-                        yelpEvents.Event4.push(item);
-                        eventCnt++;
-                    }
-                    else if (time <=  EVENT1_TIME) {
+                    if (time <=  EVENT1_TIME) {
                         yelpEvents.Event1.push(item);
                         eventCnt++;
                     }

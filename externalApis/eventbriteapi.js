@@ -3,7 +3,6 @@ const misc = require('../miscfuncs/misc.js');
 const request = require('request');
 const EBRATING_BASE = 10.5; // Base rating for a meetup event
 const RATING_INCR = 0.0;
-const LATENIGHT_TIME = 400; //event 4 time slot (4 a.m.)
 const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
@@ -148,11 +147,7 @@ module.exports = {
                             if (event.start) {
                                 if (event.start.local) {
                                     // Categorize the events by time and push to seatgeekEvents
-                                    if (time <= LATENIGHT_TIME) {
-                                        eventbriteEvents.Event4.push(item);
-                                        eventCnt++;
-                                    }
-                                    else if (time <= EVENT1_TIME) {
+                                    if (time <= EVENT1_TIME) {
                                         eventbriteEvents.Event1.push(item);
                                         eventCnt++;
                                     }
