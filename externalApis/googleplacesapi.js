@@ -10,12 +10,13 @@ var googlePlaces = new GooglePlaces(process.env.GOOGLE_API_KEY, GOOGLE_PLACES_OU
 const RADIUS = 80467.2; //meters (50 miles)
 const GPRATING_BASE = 10.5; // Base rating for a google place event
 const RATING_INCR = 0.0;
+const MAX_DEFAULT_EVENT_DURATION = 1.5; //hours
 
 module.exports = {
     getGooglePlacesData: function (location_in) {
         return new Promise(function (resolve, reject) {
             try {
-                console.log(location_in)
+                //console.log(location_in)
                 var googlePlacesEvent = {
                     Event1: [],
                     Event2: [],
@@ -44,6 +45,7 @@ module.exports = {
                         var name = '';
                         var date = '';
                         var placeLocation = '';
+                        var duration = MAX_DEFAULT_EVENT_DURATION;
 
                         for (var i = 0; i < numOfPlaces; i++) {
 
@@ -87,6 +89,7 @@ module.exports = {
                                 thumbnail: logoUrl,
                                 description: description,
                                 location: placeLocation, // lat lon
+                                duration: duration,
                             }
 
                             if (time && rating > 4.0) {

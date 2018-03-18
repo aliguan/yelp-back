@@ -71,5 +71,9 @@ module.exports = {
 
     round2NearestHundredth: function (number) {
         return Math.round(100*number)/100;
+    },
+
+    round2NearestTenth: function (number) {
+        return Math.round(10*number)/10;
     }
 }

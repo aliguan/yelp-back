@@ -1,5 +1,5 @@
 const MISC = require('../miscfuncs/misc.js');
-
+const MAX_DEFAULT_EVENT_DURATION = 1.5; //hours
 module.exports = {
 
     // Get data from Yelp and format it
@@ -29,6 +29,7 @@ module.exports = {
                     var time = '';
                     var date = '';
                     var businessLocation ='';
+                    var duration = MAX_DEFAULT_EVENT_DURATION;
                     //console.log(response)
                     response.jsonBody.businesses.forEach(business => {
 
@@ -99,6 +100,7 @@ module.exports = {
                             thumbnail: logoUrl,
                             description: description,
                             location: businessLocation,
+                            duration: duration,
                         }
                         businesses.push(item);
                     });

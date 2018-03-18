@@ -7,7 +7,9 @@ const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
-
+const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
+const SEC_TO_HOURS = 1/60/60;
+const DURATION_BIAS = 0.0;
 module.exports = {
     getEventbriteData: function (term_query, latlon, city, date_in) {
         return new Promise(function (resolve, reject) {
@@ -86,6 +88,7 @@ module.exports = {
                             description = '';
                             name = '';
                             date = '';
+                            duration = MAX_DEFAULT_EVENT_DURATION;
                             eventLocation='';
                             if (event.url && event.url !== '') {
                                 rating = rating + RATING_INCR;
@@ -113,12 +116,24 @@ module.exports = {
                                 }
                             }
 
-                            // Collec the date
+                            // Collect the date
                             if (event.start) {
                                 if (event.start.local) {
                                     date = date_in;
                                 }
+
+                                // Calculate duration of event
+                                var dateEnd;
+                                if (event.end) {
+                                    if (event.end.local) {
+                                        var startDateObj = new Date(event.start.local);
+                                        var endDateObj = new Date(event.end.local);
+                                        duration = (endDateObj.getTime() - startDateObj.getTime()) / 1000; //seconds
+                                        duration = misc.round2NearestTenth(duration * SEC_TO_HOURS) + DURATION_BIAS;
+                                    }
+                                }
                             }
+
 
                             // Collect location information
                             if (event.venue_id) {

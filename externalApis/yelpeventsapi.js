@@ -3,6 +3,7 @@ const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
+const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 module.exports = {
 
     // Get event data from Yelp and format it
@@ -36,6 +37,7 @@ module.exports = {
                 var eventCnt = 0;
                 response.jsonBody.events.forEach(event => {
                     //console.log(event);
+                    var duration = MAX_DEFAULT_EVENT_DURATION;
 
                     // Get the event time
                     var time = event.time_start;
@@ -60,7 +62,8 @@ module.exports = {
                     var item = {
                         name: "yelp evnt: " + event.name,
                         cost: eventCost,
-                        rating: eventCost * 0 + 5
+                        rating: eventCost * 0 + 5,
+                        duration: duration,
                     }
 
                     // Categorize the events by time

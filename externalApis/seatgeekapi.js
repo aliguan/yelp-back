@@ -10,6 +10,7 @@ const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
+const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 
 module.exports = {
     getSeatGeekData: function (city_in, date_in) {
@@ -58,17 +59,12 @@ module.exports = {
                             var name = '';
                             var date = '';
                             var eventLocation = '';
+                            var duration = MAX_DEFAULT_EVENT_DURATION;
 
                             for (var i = 0; i < numOfEvents; i++) {
 
                                 // Give the event a rating
                                 rating = SGRATING_BASE; // base rating for a seatgeek event
-                                url = '';
-                                logoUrl = '';
-                                description = '';
-                                name = '';
-                                date = '';
-                                eventLocation = '';
 
                                 // Get the event time
                                 var time = events.events[i].datetime_local;
@@ -163,6 +159,7 @@ module.exports = {
                                         thumbnail: logoUrl,
                                         description: description,
                                         location: eventLocation,
+                                        duration: duration,
                                     }
 
                                     if (events.events[i].datetime_local) {

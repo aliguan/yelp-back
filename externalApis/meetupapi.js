@@ -10,6 +10,9 @@ const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
+const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
+const DURATION_BIAS = 0.0; // half an hour
+const MILLISEC_TO_HOURS = 1/1000/60/60;
 
 module.exports = {
     // ------------- Meetup API Stuff
@@ -57,6 +60,7 @@ module.exports = {
                         var name = '';
                         var date = '';
                         var eventLocation = '';
+                        var duration = MAX_DEFAULT_EVENT_DURATION;
 
                         for (var i = 0; i < numOfEvents; i++) {
 
@@ -79,6 +83,12 @@ module.exports = {
                             }
                             var timeFloat = parseFloat(time);
 
+                            // Get event duration
+                            if (events.events[i].duration) {
+                                var durationMilliSec = Number(events.events[i].duration);
+                                duration = misc.round2NearestTenth(durationMilliSec*MILLISEC_TO_HOURS) + DURATION_BIAS;
+                            }
+
                             // Get the event fee/cost
                             meetupFee = 0;
                             // Some meetups don't cost anything. Only set meetupFee to fee parameter if there is one
@@ -89,12 +99,6 @@ module.exports = {
 
                             // Give the event a rating
                             rating = MURATING_BASE; // base rating for a meetup event
-                            url = '';
-                            logoUrl = '';
-                            description = '';
-                            name = '';
-                            date = '';
-                            eventLocation = '';
                             rating = rating + meetupFee*MURATING_FACT;
 
                             if (events.events[i].link && events.events[i].link !== '') {
@@ -170,6 +174,7 @@ module.exports = {
                                 thumbnail: logoUrl,
                                 description: description,
                                 location: eventLocation, // either lat lon or address of venue, or lat lon or group
+                                duration: duration,
                             }
 
                             if (events.events[i].local_time || events.events[i].time) {

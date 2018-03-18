@@ -227,7 +227,6 @@ apiRouter.post('/', (req, res, next) => {
                 yelpDinnerItemsGlobal,
             };
 
-
             if (!misc.isEmpty(events)) {
                 res.send(events);
             }
