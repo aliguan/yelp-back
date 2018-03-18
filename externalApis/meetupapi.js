@@ -179,19 +179,19 @@ module.exports = {
 
                             if (events.events[i].local_time || events.events[i].time) {
                                 // Categorize the events by time
-                                if (time <= EVENT1_TIME) {
+                                if (timeFloat <= EVENT1_TIME) {
                                     meetupEvents.Event1.push(item);
                                     eventCnt++;
                                 }
-                                else if (time <= EVENT2_TIME) {
+                                else if (timeFloat <= EVENT2_TIME) {
                                     meetupEvents.Event2.push(item);
                                     eventCnt++;
                                 }
-                                else if (time <= EVENT3_TIME) {
+                                else if (timeFloat <= EVENT3_TIME) {
                                     meetupEvents.Event3.push(item);
                                     eventCnt++;
                                 }
-                                else if (time < EVENT4_TIME) {
+                                else if (timeFloat < EVENT4_TIME) {
                                     meetupEvents.Event4.push(item);
                                     eventCnt++;
                                 }

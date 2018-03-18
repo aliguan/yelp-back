@@ -164,19 +164,19 @@ module.exports = {
 
                                     if (events.events[i].datetime_local) {
                                         // Categorize the events by time and push to seatgeekEvents
-                                        if (time <=EVENT1_TIME) {
+                                        if (timeFloat <=EVENT1_TIME) {
                                             seatgeekEvents.Event1.push(item);
                                             eventCnt++;
                                         }
-                                        else if (time <= EVENT2_TIME) {
+                                        else if (timeFloat <= EVENT2_TIME) {
                                             seatgeekEvents.Event2.push(item);
                                             eventCnt++;
                                         }
-                                        else if (time <= EVENT3_TIME) {
+                                        else if (timeFloat <= EVENT3_TIME) {
                                             seatgeekEvents.Event3.push(item);
                                             eventCnt++;
                                         }
-                                        else if (time < EVENT4_TIME) {
+                                        else if (timeFloat < EVENT4_TIME) {
                                             seatgeekEvents.Event4.push(item);
                                             eventCnt++;
                                         }

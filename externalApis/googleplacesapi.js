@@ -79,6 +79,8 @@ module.exports = {
                                 time = '1500';
                             }
 
+                            var timeFloat = parseFloat(time);
+
                             var item = {
                                 name: "gp: " + name,
                                 cost: cost,
@@ -94,23 +96,23 @@ module.exports = {
 
                             if (time && rating > 4.0) {
                                 // Categorize the events by time
-                                if (time <= 200) {
+                                if (timeFloat <= 200) {
                                     googlePlacesEvent.Event4.push(item);
                                     placeCnt++;
                                 }
-                                else if (time <= 900) {
+                                else if (timeFloat <= 900) {
                                     googlePlacesEvent.Event1.push(item);
                                     placeCnt++;
                                 }
-                                else if (time <= 1200) {
+                                else if (timeFloat <= 1200) {
                                     googlePlacesEvent.Event2.push(item);
                                     placeCnt++;
                                 }
-                                else if (time <= 1800) {
+                                else if (timeFloat <= 1800) {
                                     googlePlacesEvent.Event3.push(item);
                                     placeCnt++;
                                 }
-                                else if (time < 2400) {
+                                else if (timeFloat < 2400) {
                                     googlePlacesEvent.Event4.push(item);
                                     placeCnt++;
                                 }

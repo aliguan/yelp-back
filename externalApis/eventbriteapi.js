@@ -162,19 +162,19 @@ module.exports = {
                             if (event.start) {
                                 if (event.start.local) {
                                     // Categorize the events by time and push to seatgeekEvents
-                                    if (time <= EVENT1_TIME) {
+                                    if (timeFloat <= EVENT1_TIME) {
                                         eventbriteEvents.Event1.push(item);
                                         eventCnt++;
                                     }
-                                    else if (time <= EVENT2_TIME) {
+                                    else if (timeFloat <= EVENT2_TIME) {
                                         eventbriteEvents.Event2.push(item);
                                         eventCnt++;
                                     }
-                                    else if (time <= EVENT3_TIME) {
+                                    else if (timeFloat <= EVENT3_TIME) {
                                         eventbriteEvents.Event3.push(item);
                                         eventCnt++;
                                     }
-                                    else if (time < EVENT4_TIME) {
+                                    else if (timeFloat < EVENT4_TIME) {
                                         eventbriteEvents.Event4.push(item);
                                         eventCnt++;
                                     }

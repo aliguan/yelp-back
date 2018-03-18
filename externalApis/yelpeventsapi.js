@@ -67,19 +67,19 @@ module.exports = {
                     }
 
                     // Categorize the events by time
-                    if (time <=  EVENT1_TIME) {
+                    if (timeFloat <=  EVENT1_TIME) {
                         yelpEvents.Event1.push(item);
                         eventCnt++;
                     }
-                    else if (time <= EVENT2_TIME) {
+                    else if (timeFloat <= EVENT2_TIME) {
                         yelpEvents.Event2.push(item);
                         eventCnt++;
                     }
-                    else if (time <= EVENT3_TIME) {
+                    else if (timeFloat <= EVENT3_TIME) {
                         yelpEvents.Event3.push(item);
                         eventCnt++;
                     }
-                    else if (time < EVENT4_TIME) {
+                    else if (timeFloat < EVENT4_TIME) {
                         yelpEvents.Event4.push(item);
                         eventCnt++;
                     }
