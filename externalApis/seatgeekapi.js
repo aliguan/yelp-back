@@ -154,8 +154,7 @@ module.exports = {
                                     rating = MISC.round2NearestHundredth(rating);
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
-                                        name: "sg: " + time + "/" + date + ", " + events.events[i].title +
-                                            ", " + events.events[i].url,
+                                        name: "sg: " + events.events[i].title,
                                         cost: seatgeekFee,
                                         rating: rating,
                                         url: url,

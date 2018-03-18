@@ -90,7 +90,7 @@ module.exports = {
 
 
                         var item = {
-                            name: "ye: " + business.name +", "+ url,
+                            name: "ye: " + business.name,
                             cost: business.price,
                             rating: business.rating,
                             url: url,

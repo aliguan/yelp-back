@@ -133,7 +133,7 @@ module.exports = {
 
                             rating = misc.round2NearestHundredth(rating);
                             var item = {
-                                name: "eb: " + time + "/" + date +", "  + name + ", " + url,
+                                name: "eb: "  + name,
                                 cost: cost,
                                 rating: rating,
                                 url: url,

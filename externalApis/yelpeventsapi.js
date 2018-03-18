@@ -58,7 +58,7 @@ module.exports = {
                         }
                     }
                     var item = {
-                        name: "yelp evnt: " + event.name + ", " + event.event_site_url + ", " + event.time_start +"/" + event.time_end,
+                        name: "yelp evnt: " + event.name,
                         cost: eventCost,
                         rating: eventCost * 0 + 5
                     }
