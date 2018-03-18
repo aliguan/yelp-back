@@ -8,8 +8,8 @@ var GooglePlaces = require('googleplaces');
 const GOOGLE_PLACES_OUTPUT_FORMAT = "json"
 var googlePlaces = new GooglePlaces(process.env.GOOGLE_API_KEY, GOOGLE_PLACES_OUTPUT_FORMAT);
 const RADIUS = 80467.2; //meters (50 miles)
-const GPRATING_BASE = 11.5; // Base rating for a google place event
-const RATING_INCR = 0.5;
+const GPRATING_BASE = 10.5; // Base rating for a google place event
+const RATING_INCR = 0.0;
 
 module.exports = {
     getGooglePlacesData: function (location_in) {
