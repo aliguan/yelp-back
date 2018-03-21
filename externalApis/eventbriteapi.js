@@ -55,6 +55,7 @@ module.exports = {
 
                     var events = JSON.parse(response.body);
                     var cnt = 1;
+                    //console.log(events)
                     if (events.events.length > 0) {
                         var cost = 0;
                         var rating = 0;
@@ -188,10 +189,9 @@ module.exports = {
                         });
 
                     }
-
-                    // body.top_match_events.foreach(function(event) {
-                    //     console.log(event.name.text);
-                    // });
+                    else {
+                        resolve(eventbriteEvents);
+                    }
                 } else {
                     console.log(error);
                     reject(false);

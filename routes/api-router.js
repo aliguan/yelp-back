@@ -164,8 +164,8 @@ apiRouter.post('/', (req, res, next) => {
         .then(function (yelpEvents) {
             yelpEventsGlobal = yelpEvents;
 
-            if (doEventbriteCalls) {
-                return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city, date);
+            if (doEventbriteCalls) {          
+                return eventbriteApi.getEventbriteData(req.body.term, req.body.latlon, req.body.city, date);              
             }
             else {
                 var eventbriteEvents = {
@@ -187,8 +187,7 @@ apiRouter.post('/', (req, res, next) => {
             console.log(e)
         })  // -------------------------- End eventbrite event search
         .then(function (eventbriteEvents) {
-            eventbriteGlobal = eventbriteEvents;
-
+            eventbriteGlobal = eventbriteEvents;            
             if (doGooglePlacesCalls) {
                 return googlePlacesApi.getGooglePlacesData(req.body.latlon);
             }
@@ -228,6 +227,7 @@ apiRouter.post('/', (req, res, next) => {
             };
 
             if (!misc.isEmpty(events)) {
+                console.log("finished all api calls.")
                 res.send(events);
             }
             else {
