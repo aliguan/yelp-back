@@ -91,10 +91,10 @@ module.exports = {
                                 var durationMilliSec = Number(events.events[i].duration);
                                 duration = misc.round2NearestTenth(durationMilliSec*MILLISEC_TO_HOURS) + DURATION_BIAS;
                                 defaultDuration = false;
-                                if (duration>12) {
-                                    duration = MAX_DEFAULT_EVENT_DURATION;
-                                    defaultDuration = true;
-                                }
+                                // if (duration>12) {
+                                //     duration = MAX_DEFAULT_EVENT_DURATION;
+                                //     defaultDuration = true;
+                                // }
                             }
 
                             // Get the event fee/cost

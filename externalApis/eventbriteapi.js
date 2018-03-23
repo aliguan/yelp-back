@@ -137,10 +137,10 @@ module.exports = {
                                         duration = (endDateObj.getTime() - startDateObj.getTime()) / 1000; //seconds
                                         duration = misc.round2NearestTenth(duration * SEC_TO_HOURS) + DURATION_BIAS;
                                         defaultDuration = false;
-                                        if (duration>12) {
-                                            duration = MAX_DEFAULT_EVENT_DURATION;
-                                            defaultDuration = true;
-                                        }
+                                        // if (duration>12) {
+                                        //     duration = MAX_DEFAULT_EVENT_DURATION;
+                                        //     defaultDuration = true;
+                                        // }
                                     }
                                 }
                             }
