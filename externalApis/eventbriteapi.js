@@ -11,6 +11,10 @@ const MAX_DESCRIPTION_LENGTH = 1000;
 const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 const SEC_TO_HOURS = 1 / 60 / 60;
 const DURATION_BIAS = 0.0;
+
+// current api rate limit: 2000 calls/hr and 48000 calls/day
+// https://www.eventbrite.com/developer/v3/endpoints/events/
+// https://www.eventbrite.com/developer/v3/api_overview/errors/
 module.exports = {
     getEventbriteData: function (term_query, latlon, city, date_in) {
         return new Promise(function (resolve, reject) {
@@ -137,10 +141,6 @@ module.exports = {
                                         duration = (endDateObj.getTime() - startDateObj.getTime()) / 1000; //seconds
                                         duration = misc.round2NearestTenth(duration * SEC_TO_HOURS) + DURATION_BIAS;
                                         defaultDuration = false;
-                                        // if (duration>12) {
-                                        //     duration = MAX_DEFAULT_EVENT_DURATION;
-                                        //     defaultDuration = true;
-                                        // }
                                     }
                                 }
                             }
@@ -207,7 +207,7 @@ module.exports = {
                     }
                 } else {
                     console.log(error);
-                    reject(false);
+                    reject(false); // possibly rate limited
                 }
             }
 

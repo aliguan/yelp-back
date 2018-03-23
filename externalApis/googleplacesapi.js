@@ -36,7 +36,7 @@ module.exports = {
                 googlePlaces.placeSearch(parameters, function (error, response) {
                     if (error) {
                         console.log(error);
-                        reject(-1);
+                        reject(false);
                     } else {
 
                         var numOfPlaces = response.results.length;
@@ -134,7 +134,7 @@ module.exports = {
             catch (e) {
                 console.log(e);
                 console.log('error in getGooglePlacesData')
-                reject(-1);
+                reject(false);
             }
         });
 

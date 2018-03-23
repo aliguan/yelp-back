@@ -34,6 +34,11 @@ module.exports = {
                 start_date: todayFloat,
                 end_date: dateEndFloat,
             }).then(response => {
+                if (response.error) {
+                    console.log(response.error);
+                    reject(false);
+                }
+                else {
                 var eventCnt = 0;
                 response.jsonBody.events.forEach(event => {
                     //console.log(event);
@@ -87,10 +92,11 @@ module.exports = {
                 });
 console.log("number of yelp events: " + eventCnt);
                 resolve(yelpEvents);
+            }
 
             }).catch(e => {
                 console.log(e);
-                reject(-1);
+                reject(false);
             });
 
         });

@@ -1,5 +1,6 @@
 const MISC = require('../miscfuncs/misc.js');
 const MAX_DEFAULT_EVENT_DURATION = 1.5; //hours
+//  current rate limit is 25000 per day
 module.exports = {
 
     // Get data from Yelp and format it
@@ -32,7 +33,11 @@ module.exports = {
                     var duration = MAX_DEFAULT_EVENT_DURATION;
                     var defaultDuration = true;
                     var approximateFee =true;
-                    //console.log(response)
+                    if (response.error) {
+                        console.log(response.error);
+                        reject(false);
+                    }
+                    else {
                     response.jsonBody.businesses.forEach(business => {
 
                         switch (business.price) {
@@ -117,10 +122,11 @@ module.exports = {
                     });
 
                     resolve(businesses);
+                }
 
                 }).catch(e => {
                     console.log(e);
-                    reject(-1);
+                    reject(false);
                 });
         });
     }

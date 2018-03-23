@@ -13,6 +13,8 @@ const EVENT4_TIME = 2400;
 const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 const MAX_DESCRIPTION_LENGTH = 1000;
 
+// currently no api rate limit -> https://github.com/seatgeek/api-support/issues/50
+
 module.exports = {
     getSeatGeekData: function (city_in, date_in) {
         return new Promise(function (resolve, reject) {
@@ -45,7 +47,7 @@ module.exports = {
                 }, function (error, events) {
                     if (error) {
                         console.log(error);
-                        reject(-1);
+                        reject(false);
                     }
                     else {
                         // Check if events != null (events is returned by the API call)
@@ -207,7 +209,7 @@ module.exports = {
             catch (e) {
                 console.log(e);
                 console.log('error in getSeatGeekData')
-                reject(-1);
+                reject(false);
             }
         })
     }

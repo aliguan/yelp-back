@@ -14,7 +14,8 @@ const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 const DURATION_BIAS = 0.0; // half an hour
 const MILLISEC_TO_HOURS = 1/1000/60/60;
 const MAX_DESCRIPTION_LENGTH = 1000;
-
+// current api rate limit is 30 calls per 10 seconds
+// https://www.meetup.com/meetup_api/docs/
 module.exports = {
     // ------------- Meetup API Stuff
     // Get  data from Meetup
@@ -49,7 +50,7 @@ module.exports = {
                 }, function (error, events) {
                     if (error) {
                         console.log(error);
-                        reject(-1);
+                        reject(false);
                     } else {
                         var numOfEvents = events.events.length;
                         var eventCnt = 0;
@@ -91,10 +92,6 @@ module.exports = {
                                 var durationMilliSec = Number(events.events[i].duration);
                                 duration = misc.round2NearestTenth(durationMilliSec*MILLISEC_TO_HOURS) + DURATION_BIAS;
                                 defaultDuration = false;
-                                // if (duration>12) {
-                                //     duration = MAX_DEFAULT_EVENT_DURATION;
-                                //     defaultDuration = true;
-                                // }
                             }
 
                             // Get the event fee/cost
@@ -229,7 +226,7 @@ module.exports = {
             catch (e) {
                 console.log(e);
                 console.log('error in getMeetupData')
-                reject(-1);
+                reject(false);
             }
         });
     }
