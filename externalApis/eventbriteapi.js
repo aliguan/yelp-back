@@ -7,8 +7,9 @@ const EVENT1_TIME = 900;
 const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
+const MAX_DESCRIPTION_LENGTH = 1000;
 const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
-const SEC_TO_HOURS = 1/60/60;
+const SEC_TO_HOURS = 1 / 60 / 60;
 const DURATION_BIAS = 0.0;
 module.exports = {
     getEventbriteData: function (term_query, latlon, city, date_in) {
@@ -64,7 +65,10 @@ module.exports = {
                         var description = '';
                         var name = '';
                         var date = '';
-                        var eventLocation='';
+                        var eventLocation = '';
+                        var duration=MAX_DEFAULT_EVENT_DURATION;
+                        var defaultDuration; // the default event duration is returned (ie api call didn't provide event duration data)
+                        var approximateFee = true; // always true because eventbrite search currently ONLY returns free events
 
                         events.events.forEach(function (event, index, array) {
                             var time = event.start.local;
@@ -84,13 +88,6 @@ module.exports = {
 
                             // Give the event a rating
                             rating = EBRATING_BASE; // base rating for a eventbrite event
-                            url = '';
-                            logoUrl = '';
-                            description = '';
-                            name = '';
-                            date = '';
-                            duration = MAX_DEFAULT_EVENT_DURATION;
-                            eventLocation='';
                             if (event.url && event.url !== '') {
                                 rating = rating + RATING_INCR;
                                 url = event.url;
@@ -104,8 +101,14 @@ module.exports = {
 
                             if (event.description) {
                                 if (event.description.text && event.description.text !== '') {
-                                    if (event.description.text.length <= 1000 && event.description.text.length > 0) {
-                                        description = event.description.text;
+                                    if (event.description.text.length > 0) {
+                                        if (event.description.text.length>MAX_DESCRIPTION_LENGTH) {
+                                            description = event.description.text.substring(0,MAX_DESCRIPTION_LENGTH-1);
+                                            description += "...";
+                                        }
+                                        else {
+                                            description = event.description.text;
+                                        }
                                     }
                                 }
                             }
@@ -118,6 +121,8 @@ module.exports = {
                             }
 
                             // Collect the date
+                            duration = MAX_DEFAULT_EVENT_DURATION;
+                            defaultDuration=true;
                             if (event.start) {
                                 if (event.start.local) {
                                     date = date_in;
@@ -131,6 +136,11 @@ module.exports = {
                                         var endDateObj = new Date(event.end.local);
                                         duration = (endDateObj.getTime() - startDateObj.getTime()) / 1000; //seconds
                                         duration = misc.round2NearestTenth(duration * SEC_TO_HOURS) + DURATION_BIAS;
+                                        defaultDuration = false;
+                                        if (duration>12) {
+                                            duration = MAX_DEFAULT_EVENT_DURATION;
+                                            defaultDuration = true;
+                                        }
                                     }
                                 }
                             }
@@ -149,7 +159,7 @@ module.exports = {
 
                             rating = misc.round2NearestHundredth(rating);
                             var item = {
-                                name: "eb: "  + name,
+                                name: "eb: " + name,
                                 cost: cost,
                                 rating: rating,
                                 url: url,
@@ -158,6 +168,9 @@ module.exports = {
                                 thumbnail: logoUrl,
                                 description: description,
                                 location: eventLocation,
+                                duration: duration,
+                                defaultDuration: defaultDuration,
+                                approximateFee: approximateFee,
                             };
 
                             if (event.start) {

@@ -11,6 +11,7 @@ const EVENT2_TIME = 1200;
 const EVENT3_TIME = 1800;
 const EVENT4_TIME = 2400;
 const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
+const MAX_DESCRIPTION_LENGTH = 1000;
 
 module.exports = {
     getSeatGeekData: function (city_in, date_in) {
@@ -60,8 +61,12 @@ module.exports = {
                             var date = '';
                             var eventLocation = '';
                             var duration = MAX_DEFAULT_EVENT_DURATION;
+                            var defaultDuration;
+                            var lowestPrice;
+                            var highestPrice;
 
                             for (var i = 0; i < numOfEvents; i++) {
+                                defaultDuration = true;
 
                                 // Give the event a rating
                                 rating = SGRATING_BASE; // base rating for a seatgeek event
@@ -78,7 +83,11 @@ module.exports = {
 
                                 // Get the event fee/cost
                                 seatgeekFee = -1.0;
+                                lowestPrice = 0;
+                                highestPrice = 0;
                                 if (!MISC.isEmpty(events.events[i].stats)) {
+                                    lowestPrice = MISC.round2NearestHundredth(events.events[i].stats.lowest_price);
+                                    highestPrice = MISC.round2NearestHundredth(events.events[i].stats.highest_price);
                                     if (events.events[i].stats.average_price) {
                                         // Average price. do we want max price? or give user a choice?
                                         seatgeekFee = events.events[i].stats.average_price;
@@ -87,6 +96,7 @@ module.exports = {
                                         seatgeekFee = events.events[i].stats.lowest_price;
                                     }
                                     seatgeekFee = MISC.round2NearestHundredth(seatgeekFee);
+
                                 }
 
                                 // !!!only push the event to the array IF there is an accurate fee returned
@@ -118,8 +128,6 @@ module.exports = {
                                     if (events.events[i].datetime_local) {
                                         date = events.events[i].datetime_local;
                                     }
-
-                                    // console.log("raw date sg:" + date)
 
                                     // Collect location information
                                     if (events.events[i].venue) {
@@ -160,6 +168,9 @@ module.exports = {
                                         description: description,
                                         location: eventLocation,
                                         duration: duration,
+                                        defaultDuration: defaultDuration,
+                                        lowestPrice: lowestPrice,
+                                        highestPrice: highestPrice,
                                     }
 
                                     if (events.events[i].datetime_local) {

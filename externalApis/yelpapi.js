@@ -30,6 +30,8 @@ module.exports = {
                     var date = '';
                     var businessLocation ='';
                     var duration = MAX_DEFAULT_EVENT_DURATION;
+                    var defaultDuration = true;
+                    var approximateFee =true;
                     //console.log(response)
                     response.jsonBody.businesses.forEach(business => {
 
@@ -38,16 +40,16 @@ module.exports = {
                                 business.price = 10;
                                 break;
                             case '$$':
-                                business.price = 20;
+                                business.price = 30; //20 before
                                 break;
                             case '$$$':
-                                business.price = 46;
+                                business.price = 60; //46 before
                                 break;
                             case '$$$$':
-                                business.price = 65;
+                                business.price = 100; //65 before
                                 break;
                             default:
-                                business.price = 20;
+                                business.price = 30;
                         }
 
                         // Collect url
@@ -63,12 +65,19 @@ module.exports = {
                         // Collect description
                         if (business.phone) {
                             description = business.phone;
+                            if (business.categories){
+                                description += ", " + business.categories[0].title;
+                            }
                         }
 
                         // Collect location information
                         businessLocation = location_in;
 
                         if (business.location) {
+                            description+=", " + business.location.address1 + "," +
+                            business.location.city + "," +
+                            business.location.state + "," +
+                            business.location.zip_code;
                             if (business.coordinates) {
                                 // businessLocation = business.coordinates.latitude + "," + business.coordinates.longitude;
                                 businessLocation = {
@@ -101,6 +110,8 @@ module.exports = {
                             description: description,
                             location: businessLocation,
                             duration: duration,
+                            defaultDuration: defaultDuration,
+                            approximateFee: approximateFee,
                         }
                         businesses.push(item);
                     });

@@ -13,6 +13,7 @@ const EVENT4_TIME = 2400;
 const MAX_DEFAULT_EVENT_DURATION = 3.0; //hours
 const DURATION_BIAS = 0.0; // half an hour
 const MILLISEC_TO_HOURS = 1/1000/60/60;
+const MAX_DESCRIPTION_LENGTH = 1000;
 
 module.exports = {
     // ------------- Meetup API Stuff
@@ -61,6 +62,8 @@ module.exports = {
                         var date = '';
                         var eventLocation = '';
                         var duration = MAX_DEFAULT_EVENT_DURATION;
+                        var defaultDuration;
+                        var approximateFee;
 
                         for (var i = 0; i < numOfEvents; i++) {
 
@@ -71,7 +74,6 @@ module.exports = {
                             }
                             else {
                                 time = events.events[i].time+events.events[i].utc_offset;
-                                //console.log(events.events[i])
                                 if (time) {
                                     var dateObj = new Date(time);
                                     //console.log(dateObj)
@@ -84,16 +86,24 @@ module.exports = {
                             var timeFloat = parseFloat(time);
 
                             // Get event duration
+                            defaultDuration = true;
                             if (events.events[i].duration) {
                                 var durationMilliSec = Number(events.events[i].duration);
                                 duration = misc.round2NearestTenth(durationMilliSec*MILLISEC_TO_HOURS) + DURATION_BIAS;
+                                defaultDuration = false;
+                                if (duration>12) {
+                                    duration = MAX_DEFAULT_EVENT_DURATION;
+                                    defaultDuration = true;
+                                }
                             }
 
                             // Get the event fee/cost
                             meetupFee = 0;
+                            approximateFee = true;
                             // Some meetups don't cost anything. Only set meetupFee to fee parameter if there is one
                             if (!misc.isEmpty(events.events[i].fee)) {
                                 meetupFee = events.events[i].fee.amount;
+                                approximateFee = false;
                             }
                             meetupFee = misc.round2NearestHundredth(meetupFee);
 
@@ -106,10 +116,17 @@ module.exports = {
                                 url = events.events[i].link;
                             }
 
+                            // Get the event description
                             if (events.events[i].description && !misc.isEmpty(events.events[i].description)) {
                                 if (events.events[i].description.length) {
-                                    if (events.events[i].description.length <= 1000 && events.events[i].description.length > 0) {
-                                        description = events.events[i].description;
+                                    if (events.events[i].description.length > 0) {
+                                        if (events.events[i].description.length > MAX_DESCRIPTION_LENGTH) {
+                                            description = events.events[i].description.substring(0, MAX_DESCRIPTION_LENGTH - 1);
+                                            description += "...";
+                                        }
+                                        else {
+                                            description = events.events[i].description;
+                                        }
                                     }
                                 }
 
@@ -175,6 +192,8 @@ module.exports = {
                                 description: description,
                                 location: eventLocation, // either lat lon or address of venue, or lat lon or group
                                 duration: duration,
+                                defaultDuration: defaultDuration,
+                                approximateFee: approximateFee,
                             }
 
                             if (events.events[i].local_time || events.events[i].time) {
