@@ -19,7 +19,7 @@ module.exports = {
                 client.search({
                     term: term_in,
                     //open_at: unix_time,
-                    location: location_in,                    
+                    location: location_in,
                     limit: 50,
                     offset: 0,
                 }).then(response => {
@@ -105,7 +105,7 @@ module.exports = {
 
 
                         var item = {
-                            name: "ye: " + business.name,
+                            name: business.name,
                             cost: business.price,
                             rating: business.rating,
                             url: url,
@@ -117,6 +117,7 @@ module.exports = {
                             duration: duration,
                             defaultDuration: defaultDuration,
                             approximateFee: approximateFee,
+                            origin: 'yelp'
                         }
                         businesses.push(item);
                     });

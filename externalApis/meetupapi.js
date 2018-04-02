@@ -179,7 +179,7 @@ module.exports = {
 
                             rating = misc.round2NearestHundredth(rating);
                             var item = {
-                                name: "mu: " + name,
+                                name: name,
                                 cost: meetupFee,
                                 rating: rating,
                                 url: url,
@@ -191,6 +191,7 @@ module.exports = {
                                 duration: duration,
                                 defaultDuration: defaultDuration,
                                 approximateFee: approximateFee,
+                                origin: 'meetup'
                             }
 
                             if (events.events[i].local_time || events.events[i].time) {

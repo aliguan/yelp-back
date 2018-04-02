@@ -1,6 +1,6 @@
 // Currently only returns 20 results max, and only searches for parks within a 50 mile radius
-// Only searching parks because it is difficult to price the other returned places because there 
-// is no pricing data 
+// Only searching parks because it is difficult to price the other returned places because there
+// is no pricing data
 
 
 const misc = require('../miscfuncs/misc.js');
@@ -63,12 +63,12 @@ module.exports = {
 
                             // Collect location information
                             if (response.results[i].geometry) {
-                                if (response.results[i].geometry.location) {                                    
+                                if (response.results[i].geometry.location) {
                                     placeLocation = {
                                         lat: response.results[i].geometry.location.lat,
                                         lng: response.results[i].geometry.location.lng
                                     }
-                                } 
+                                }
                             }
                             if (response.results[i].vicinity) {
                                 vicinity=response.results[i].vicinity;
@@ -91,7 +91,7 @@ module.exports = {
                             var timeFloat = parseFloat(time);
 
                             var item = {
-                                name: "gp: " + name,
+                                name: name,
                                 cost: cost,
                                 rating: GPRATING_BASE,
                                 url: url,
@@ -104,6 +104,7 @@ module.exports = {
                                 defaultDuration: defaultDuration,
                                 vicinity: vicinity,
                                 approximateFee: approximateFee,
+                                origin: 'places'
                             }
 
                             if (time && rating > 4.0) {
@@ -124,7 +125,7 @@ module.exports = {
                                     googlePlacesEvent.Event4.push(item);
                                     placeCnt++;
                                 }
-                            }                            
+                            }
                         }
                         console.log("number of google places: " + placeCnt)
                         resolve(googlePlacesEvent);

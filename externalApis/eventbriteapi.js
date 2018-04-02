@@ -159,7 +159,7 @@ module.exports = {
 
                             rating = misc.round2NearestHundredth(rating);
                             var item = {
-                                name: "eb: " + name,
+                                name: name,
                                 cost: cost,
                                 rating: rating,
                                 url: url,
@@ -171,6 +171,7 @@ module.exports = {
                                 duration: duration,
                                 defaultDuration: defaultDuration,
                                 approximateFee: approximateFee,
+                                origin: 'eventbrite'
                             };
 
                             if (event.start) {

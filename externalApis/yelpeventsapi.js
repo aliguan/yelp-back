@@ -15,8 +15,8 @@ module.exports = {
                 Event2: [],
                 Event3: [],
                 Event4: []
-            };            
-            var dateEnd = MISC.getDate(date_in, 0); 
+            };
+            var dateEnd = MISC.getDate(date_in, 0);
             var dateEndObj = new Date(dateEnd);
             var dateEndFloat = Math.floor(dateEndObj.getTime() / 1000);
             //console.log(dateEnd)
@@ -69,6 +69,7 @@ module.exports = {
                         cost: eventCost,
                         rating: eventCost * 0 + 5,
                         duration: duration,
+                        origin: 'yelp-e'
                     }
 
                     // Categorize the events by time

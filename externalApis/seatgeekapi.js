@@ -160,7 +160,7 @@ module.exports = {
                                     rating = MISC.round2NearestHundredth(rating);
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
-                                        name: "sg: " + events.events[i].title,
+                                        name: events.events[i].title,
                                         cost: seatgeekFee,
                                         rating: rating,
                                         url: url,
@@ -173,6 +173,7 @@ module.exports = {
                                         defaultDuration: defaultDuration,
                                         lowestPrice: lowestPrice,
                                         highestPrice: highestPrice,
+                                        origin: 'seatgeek'
                                     }
 
                                     if (events.events[i].datetime_local) {
