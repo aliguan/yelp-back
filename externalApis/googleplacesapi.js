@@ -59,8 +59,20 @@ module.exports = {
                             // Collect the name of the event
                             if (response.results[i].name) {
                                 name = response.results[i].name;
+                                
+                                // Construct URL
+                                var nameArrayForUrl = new Array();
+                                nameArrayForUrl = name.split(" ");
+                                url = 'https://www.google.com/search?q=';
+                                for (var ii = 0; ii < nameArrayForUrl.length; ii++) {
+                                    url = url + nameArrayForUrl[ii];
+                                    if (ii !== nameArrayForUrl.length - 1) {
+                                        url = url + "+";
+                                    }
+                                }
                             }
 
+                            
                             // Collect location information
                             if (response.results[i].geometry) {
                                 if (response.results[i].geometry.location) {
