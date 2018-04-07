@@ -3,6 +3,7 @@ var seatgeek = require("../seatgeek/seatgeek");
 const MISC = require('../miscfuncs/misc.js');
 const CLIENT_ID = process.env.SEATGEEK_ID;
 const CLIENT_KEY = process.env.SEATGEEK_KEY;
+const SG_AID = process.env.SEATGEEK_AFFLIATE_ID;
 const SGRATING_FACT = 1 *0/ 100; // The bigger this is, the more the price of the event increases the rating
 const SGRATING_BASE = 10.5; // Base rating for a seatgeek event
 const RATING_INCR = 0.0;
@@ -43,7 +44,8 @@ module.exports = {
                     'datetime_local.lte': dateEnd,  //lte = less than or equal to
                     'venue.city': city_in,
                     client_id: CLIENT_ID,
-                    client_secret: CLIENT_KEY
+                    client_secret: CLIENT_KEY,
+                    aid: SG_AID,
                 }, function (error, events) {
                     if (error) {
                         console.log(error);
