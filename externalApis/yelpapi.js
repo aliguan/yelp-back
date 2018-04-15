@@ -33,7 +33,7 @@ module.exports = {
                         var url = '';
                         var logoUrl = '';                    
                         var name = '';
-                        var time = '';
+                        var time = 'Food'; //hi jacking the time field to display "Food" in the results
                         var date = '';
                         var businessLocation ='';
                         var duration = MAX_DEFAULT_EVENT_DURATION;
@@ -133,7 +133,7 @@ module.exports = {
                             cost: business.price,
                             rating: business.rating,
                             url: url,
-                            time: time,
+                            time: time, // value is "Food"
                             date: date,
                             thumbnail: logoUrl,
                             description: description,
