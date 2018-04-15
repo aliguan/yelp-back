@@ -52,21 +52,24 @@ module.exports = {
                         console.log(error);
                         reject(false);
                     } else {
-                        var numOfEvents = events.events.length;
-                        var eventCnt = 0;
-                        var cost = 0;
-                        var rating = 0;
-                        var url = '';
-                        var logoUrl = '';
-                        var description = '';
-                        var name = '';
-                        var date = '';
-                        var eventLocation = '';
-                        var duration = MAX_DEFAULT_EVENT_DURATION;
-                        var defaultDuration;
-                        var approximateFee;
-
+                        var numOfEvents = events.events.length;  
+                        var eventCnt = 0;                                              
                         for (var i = 0; i < numOfEvents; i++) {
+                            var cost = 0;
+                            var rating = 0;
+                            var url = '';
+                            var logoUrl = '';
+                            var name = '';
+                            var date = '';
+                            var eventLocation = '';
+                            var duration = MAX_DEFAULT_EVENT_DURATION;
+                            var defaultDuration = true;
+                            var approximateFee = true;
+                            var description = '';
+                            var phone='';
+                            var address='';
+                            var rsvpCnt = 0;
+                            var waitlistCnt = 0;
 
                             // Get the event time
                             var time = events.events[i].local_time;
@@ -85,6 +88,24 @@ module.exports = {
                                 }
                             }
                             var timeFloat = parseFloat(time);
+
+                            // get event address
+                            if (events.events[i].venue) {
+                                address = events.events[i].venue.address_1 +
+                                ", " + events.events[i].venue.city +
+                                ", " + events.events[i].venue.state +
+                                ", " + events.events[i].venue.zip;
+                            }
+
+                            // rsvp count
+                            if (events.events[i].yes_rsvp_count) {
+                                rsvpCnt = events.events[i].yes_rsvp_count;
+                            }
+
+                            // waitlist count
+                            if (events.events[i].waitlistCnt) {
+                                waitlistCnt = events.events[i].waitlistCnt;
+                            }
 
                             // Get event duration
                             defaultDuration = true;
@@ -191,6 +212,8 @@ module.exports = {
                                 duration: duration,
                                 defaultDuration: defaultDuration,
                                 approximateFee: approximateFee,
+                                rsvpCnt: rsvpCnt,
+                                waitlistCnt: waitlistCnt,
                                 origin: 'meetup'
                             }
 

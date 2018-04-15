@@ -38,23 +38,23 @@ module.exports = {
                         console.log(error);
                         reject(false);
                     } else {
-
                         var numOfPlaces = response.results.length;
                         var placeCnt = 0;
-                        var cost = 20;
-                        var rating = 0;
-                        var url = '';
-                        var logoUrl = '';
-                        var description = 'Park/Outdoors';
-                        var name = '';
-                        var date = '';
-                        var placeLocation = '';
-                        var duration = MAX_DEFAULT_EVENT_DURATION;
-                        var defaultDuration = true; // the default event duration is returned (ie api call didn't provide event duration data)
-                        var vicinity =''; //google places returns an address or phrase
-                        var approximateFee = true;
-
-                        for (var i = 0; i < numOfPlaces; i++) {
+                        for (var i = 0; i < numOfPlaces; i++) {   
+                            var cost = 20;
+                            var rating = 0;
+                            var url = '';
+                            var logoUrl = '';                        
+                            var name = '';
+                            var date = '';
+                            var placeLocation = '';
+                            var duration = MAX_DEFAULT_EVENT_DURATION;
+                            var defaultDuration = true; // the default event duration is returned (ie api call didn't provide event duration data)
+                            var vicinity =''; //google places returns an address or phrase
+                            var approximateFee = true;
+                            var phone='';
+                            var address='';
+                            var description = 'Park/Outdoors';
 
                             // Collect the name of the event
                             if (response.results[i].name) {
@@ -71,7 +71,6 @@ module.exports = {
                                     }
                                 }
                             }
-
                             
                             // Collect location information
                             if (response.results[i].geometry) {
@@ -86,11 +85,21 @@ module.exports = {
                                 vicinity=response.results[i].vicinity;
                             }
 
+                            // Description
+                            if (response.results[i].opening_hours) {
+                                if (response.results[i].opening_hours.open_now) {
+                                    description += ", Open Now";
+                                }
+                            }
+
+                            // google rating
                             if (response.results[i].rating) {
                                 rating = response.results[i].rating;
                             }
                             rating = misc.round2NearestHundredth(rating);
 
+
+                            // Randomize time 
                             var timernd = Math.floor(Math.random() * 2); //random number: 0 or 1
 
                             if (timernd == 1) {
@@ -116,6 +125,9 @@ module.exports = {
                                 defaultDuration: defaultDuration,
                                 vicinity: vicinity,
                                 approximateFee: approximateFee,
+                                phone: phone,
+                                address: address,
+                                gpRating: rating,
                                 origin: 'places'
                             }
 

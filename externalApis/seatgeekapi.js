@@ -56,21 +56,32 @@ module.exports = {
                         if (events && events !== null) {
                             var numOfEvents = events.events.length;
                             var eventCnt = 0;
-                            var cost = 0;
-                            var rating = 0;
-                            var url = '';
-                            var logoUrl = '';
-                            var description = '';
-                            var name = '';
-                            var date = '';
-                            var eventLocation = '';
-                            var duration = MAX_DEFAULT_EVENT_DURATION;
-                            var defaultDuration;
-                            var lowestPrice;
-                            var highestPrice;
 
                             for (var i = 0; i < numOfEvents; i++) {
+                                var cost = 0;
+                                var rating = 0;
+                                var url = '';
+                                var logoUrl = '';
+                                var description = '';
+                                var name = '';
+                                var date = '';
+                                var eventLocation = '';
+                                var duration = MAX_DEFAULT_EVENT_DURATION;
+                                var defaultDuration=true;
+                                var lowestPrice=0.0;
+                                var highestPrice=0.0;
+                                var phone='';
+                                var address='';
+                                var sgScore = 0.0;
                                 defaultDuration = true;
+
+                                // Address
+                                if (events.events[i].venue.address) {
+                                    address = events.events[i].venue.address + ", " +
+                                    events.events[i].venue.city + ", " +
+                                    events.events[i].venue.state + ", " + 
+                                    events.events[i].venue.postal_code;
+                                }
 
                                 // Give the event a rating
                                 rating = SGRATING_BASE; // base rating for a seatgeek event
@@ -160,6 +171,12 @@ module.exports = {
                                     }
 
                                     rating = MISC.round2NearestHundredth(rating);
+
+                                    //Seatgeek's score
+                                    if (events.events[i].score) {
+                                        sgScore = MISC.round2NearestHundredth(events.events[i].score);
+                                    }
+
                                     // Construct the event item to be pushed/appened to seatgeekEvents
                                     var item = {
                                         name: events.events[i].title,
@@ -175,6 +192,9 @@ module.exports = {
                                         defaultDuration: defaultDuration,
                                         lowestPrice: lowestPrice,
                                         highestPrice: highestPrice,
+                                        phone: phone,
+                                        address: address,
+                                        sgScore: sgScore,
                                         origin: 'seatgeek'
                                     }
 

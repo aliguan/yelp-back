@@ -62,19 +62,20 @@ module.exports = {
                     var cnt = 1;
                     //console.log(events)
                     if (events.events.length > 0) {
-                        var cost = 0;
-                        var rating = 0;
-                        var url = '';
-                        var logoUrl = '';
-                        var description = '';
-                        var name = '';
-                        var date = '';
-                        var eventLocation = '';
-                        var duration=MAX_DEFAULT_EVENT_DURATION;
-                        var defaultDuration; // the default event duration is returned (ie api call didn't provide event duration data)
-                        var approximateFee = true; // always true because eventbrite search currently ONLY returns free events
-
                         events.events.forEach(function (event, index, array) {
+                            var cost = 0;
+                            var rating = 0;
+                            var url = '';
+                            var logoUrl = '';                        
+                            var name = '';
+                            var date = '';
+                            var eventLocation = '';
+                            var duration=MAX_DEFAULT_EVENT_DURATION;
+                            var defaultDuration; // the default event duration is returned (ie api call didn't provide event duration data)
+                            var approximateFee = true; // always true because eventbrite search currently ONLY returns free events
+                            var phone='';
+                            var address='';
+                            var description = '';
                             var time = event.start.local;
 
                             if (time) {
@@ -171,6 +172,8 @@ module.exports = {
                                 duration: duration,
                                 defaultDuration: defaultDuration,
                                 approximateFee: approximateFee,
+                                phone: phone,
+                                address: address,
                                 origin: 'eventbrite'
                             };
 

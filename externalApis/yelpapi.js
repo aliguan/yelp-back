@@ -23,22 +23,26 @@ module.exports = {
                     limit: 50,
                     offset: 0,
                 }).then(response => {
-                    var url = '';
-                    var logoUrl = '';
-                    var description = '';
-                    var name = '';
-                    var time = '';
-                    var date = '';
-                    var businessLocation ='';
-                    var duration = MAX_DEFAULT_EVENT_DURATION;
-                    var defaultDuration = true;
-                    var approximateFee =true;
+
                     if (response.error) {
                         console.log(response.error);
                         reject(false);
                     }
                     else {
                     response.jsonBody.businesses.forEach(business => {
+                        var url = '';
+                        var logoUrl = '';                    
+                        var name = '';
+                        var time = '';
+                        var date = '';
+                        var businessLocation ='';
+                        var duration = MAX_DEFAULT_EVENT_DURATION;
+                        var defaultDuration = true;
+                        var approximateFee =true;
+                        var phone ='';
+                        var address= '';
+                        var yelpRating = 4.0;
+                        var description = '';
 
                         switch (business.price) {
                             case '$':
@@ -69,9 +73,34 @@ module.exports = {
 
                         // Collect description
                         if (business.phone) {
-                            description = business.phone;
-                            if (business.categories){
-                                description += ", " + business.categories[0].title;
+                            phone = business.phone;
+                        }
+
+                        //untampered yelp rating
+                        if (business.rating) {
+                            yelpRating = business.rating;
+                        }
+
+                        // Create description field
+                        if (business.categories) {
+                            for (var i = 0; i < business.categories.length; i++) {
+                                if (business.categories[i].title != undefined &&
+                                business.categories[i].title != null) {
+                                    description += business.categories[i].title;
+                                    if (i!=business.categories.length-1) {
+                                        description += ", ";
+                                    }
+                                }
+                            }
+                        }
+
+                        // Create address field
+                        if (business.location.display_address) {
+                            for (var i = 0; i < business.location.display_address.length; i++) {
+                                address += business.location.display_address[i];
+                                if (i!=business.location.display_address.length-1) {
+                                    address += ", ";
+                                }
                             }
                         }
 
@@ -79,10 +108,6 @@ module.exports = {
                         businessLocation = location_in;
 
                         if (business.location) {
-                            description+=", " + business.location.address1 + "," +
-                            business.location.city + "," +
-                            business.location.state + "," +
-                            business.location.zip_code;
                             if (business.coordinates) {
                                 // businessLocation = business.coordinates.latitude + "," + business.coordinates.longitude;
                                 businessLocation = {
@@ -103,7 +128,6 @@ module.exports = {
 
                         }
 
-
                         var item = {
                             name: business.name,
                             cost: business.price,
@@ -113,6 +137,9 @@ module.exports = {
                             date: date,
                             thumbnail: logoUrl,
                             description: description,
+                            phone: phone,
+                            address: address,
+                            yelpRating: yelpRating,                            
                             location: businessLocation,
                             duration: duration,
                             defaultDuration: defaultDuration,
