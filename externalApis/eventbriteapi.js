@@ -174,6 +174,7 @@ module.exports = {
                                 approximateFee: approximateFee,
                                 phone: phone,
                                 address: address,
+                                other: [],
                                 origin: 'eventbrite'
                             };
 

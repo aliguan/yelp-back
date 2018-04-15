@@ -127,7 +127,7 @@ module.exports = {
                                 approximateFee: approximateFee,
                                 phone: phone,
                                 address: address,
-                                gpRating: rating,
+                                other: rating,
                                 origin: 'places'
                             }
 

@@ -190,11 +190,9 @@ module.exports = {
                                         location: eventLocation,
                                         duration: duration,
                                         defaultDuration: defaultDuration,
-                                        lowestPrice: lowestPrice,
-                                        highestPrice: highestPrice,
                                         phone: phone,
                                         address: address,
-                                        sgScore: sgScore,
+                                        other: [sgScore,lowestPrice,highestPrice],
                                         origin: 'seatgeek'
                                     }
 

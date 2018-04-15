@@ -139,7 +139,7 @@ module.exports = {
                             description: description,
                             phone: phone,
                             address: address,
-                            yelpRating: yelpRating,                            
+                            other: yelpRating,                            
                             location: businessLocation,
                             duration: duration,
                             defaultDuration: defaultDuration,

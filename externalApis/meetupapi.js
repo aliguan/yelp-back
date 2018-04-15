@@ -212,8 +212,7 @@ module.exports = {
                                 duration: duration,
                                 defaultDuration: defaultDuration,
                                 approximateFee: approximateFee,
-                                rsvpCnt: rsvpCnt,
-                                waitlistCnt: waitlistCnt,
+                                other:[rsvpCnt,waitlistCnt],
                                 origin: 'meetup'
                             }
 
