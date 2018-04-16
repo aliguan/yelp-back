@@ -130,8 +130,10 @@ module.exports = {
                                         }
                                     }
 
+                                    // description
                                     if (events.events[i].type && !MISC.isEmpty(events.events[i].type)) {
                                         description = events.events[i].type;
+                                        description = description.replace(/_/g," ");
                                     }
 
                                     // Collect the name of the event

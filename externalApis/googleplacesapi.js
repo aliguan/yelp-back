@@ -90,6 +90,9 @@ module.exports = {
                                 if (response.results[i].opening_hours.open_now) {
                                     description += ", Open Now";
                                 }
+                                else {
+                                    description += ", Closed Now";
+                                }
                             }
 
                             // google rating
